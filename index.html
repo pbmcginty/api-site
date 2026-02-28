@@ -7,854 +7,617 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;200;300;400;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --navy:      #08142E;
-    --sapphire:  #0F3068;
-    --aegean:    #1A5CB0;
-    --cerulean:  #2F80D4;
-    --sky:       #6BAEE8;
-    --mist:      #BDD8F4;
-    --linen:     #F2EDE6;
-    --villa:     #FAF8F5;
-    --white:     #FFFFFF;
-    --accent:    #4FA3E0;
-  }
+:root {
+  --navy:     #08142E;
+  --sapphire: #0F3068;
+  --aegean:   #1A5CB0;
+  --cerulean: #2F80D4;
+  --sky:      #6BAEE8;
+  --mist:     #BDD8F4;
+  --villa:    #FAF8F5;
+  --white:    #FFFFFF;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body {
+  width:100%; height:100%;
+  background: var(--navy);
+  color: var(--villa);
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+}
 
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+/* INTRO */
+#intro {
+  position: fixed; inset:0; z-index:9999;
+  background: var(--navy);
+  display: flex; align-items:center; justify-content:center;
+}
+#tw-text {
+  font-size: clamp(1.4rem,4vw,2.8rem);
+  font-weight: 200; letter-spacing: 0.1em;
+  background: linear-gradient(90deg, var(--sky), var(--villa) 50%, var(--mist));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  white-space:nowrap;
+}
+#tw-cursor {
+  display:inline-block; width:2px; height:1.1em;
+  background:var(--sky); margin-left:3px; vertical-align:middle;
+  animation: blink 0.7s step-end infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
-  html, body {
-    width: 100%; height: 100%;
-    overflow-x: hidden;
-  }
+/* LOGO */
+#logo {
+  position:fixed; top:24px; left:28px; z-index:1000;
+  display:flex; align-items:center; gap:10px;
+  text-decoration:none; opacity:0; transition:opacity 0.5s ease;
+  pointer-events:none;
+}
+#logo.show { opacity:1; pointer-events:all; }
+.logo-mark {
+  font-size:0.8rem; font-weight:400; letter-spacing:0.22em;
+  color:var(--sky); border:1px solid rgba(111,174,232,0.35);
+  padding:5px 12px; border-radius:4px;
+  background:rgba(15,48,104,0.5); backdrop-filter:blur(8px);
+}
+.logo-name {
+  font-size:0.65rem; font-weight:200; letter-spacing:0.18em;
+  text-transform:uppercase; color:var(--mist); opacity:0.65;
+}
 
-  body {
-    background: var(--navy);
-    color: var(--villa);
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: 300;
-  }
+/* NAV */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:500;
+  padding:22px 32px 22px 180px;
+  display:flex; justify-content:flex-end; align-items:center; gap:36px;
+  background:linear-gradient(to bottom, rgba(8,20,46,0.95) 0%, transparent);
+}
+nav a {
+  font-size:0.68rem; letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--mist); text-decoration:none; opacity:0.65; transition:opacity 0.2s;
+}
+nav a:hover { opacity:1; }
+nav .cta {
+  background:linear-gradient(135deg,var(--aegean),var(--cerulean));
+  color:var(--white) !important; opacity:1 !important;
+  padding:8px 20px; border-radius:5px;
+  box-shadow:0 4px 20px rgba(47,128,212,0.3);
+  transition:box-shadow 0.2s, transform 0.2s !important;
+}
+nav .cta:hover { transform:translateY(-1px); box-shadow:0 8px 28px rgba(47,128,212,0.5); }
 
-  /* ── INTRO SCREEN ── */
-  #intro {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    background: var(--navy);
-    transition: opacity 0.8s ease, visibility 0.8s ease;
-  }
+/* HOME CURTAIN */
+#home-curtain {
+  position:fixed; inset:0; z-index:100;
+  overflow-y:auto; background:var(--navy);
+  transform:translateY(0);
+  transition:transform 0.85s cubic-bezier(0.7,0,0.3,1);
+}
+#home-curtain.pull-down { transform:translateY(100vh); }
 
-  #intro.fade-out {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-  }
+/* SERVICE PAGES */
+.svc-page {
+  position:fixed; inset:0; z-index:50;
+  overflow-y:auto; background:var(--navy);
+  display:none;
+}
+.svc-page.active { display:block; }
 
-  #typewriter-wrap {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
+/* HERO */
+.hero {
+  min-height:100vh; display:grid; place-items:center;
+  position:relative; overflow:hidden; padding:120px 60px 80px;
+}
+.hero-grid {
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(111,174,232,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(111,174,232,0.04) 1px, transparent 1px);
+  background-size:60px 60px; pointer-events:none;
+}
+.orb1 {
+  position:absolute; width:700px; height:700px; border-radius:50%;
+  background:radial-gradient(circle,rgba(47,128,212,0.18) 0%,transparent 70%);
+  top:-100px; right:-100px; pointer-events:none;
+}
+.orb2 {
+  position:absolute; width:500px; height:500px; border-radius:50%;
+  background:radial-gradient(circle,rgba(15,48,104,0.4) 0%,transparent 70%);
+  bottom:-80px; left:-80px; pointer-events:none;
+}
+.hero-inner { position:relative; z-index:2; max-width:880px; text-align:center; }
+.eyebrow {
+  font-size:0.65rem; letter-spacing:0.3em; text-transform:uppercase;
+  color:var(--sky); opacity:0.8; margin-bottom:32px;
+  display:flex; align-items:center; justify-content:center; gap:14px;
+}
+.eyebrow::before,.eyebrow::after { content:''; flex:1; max-width:60px; height:1px; }
+.eyebrow::before { background:linear-gradient(90deg,transparent,var(--sky)); }
+.eyebrow::after  { background:linear-gradient(90deg,var(--sky),transparent); }
+h1 {
+  font-weight:100; font-size:clamp(2.8rem,6vw,5.2rem); line-height:1.12; margin-bottom:30px;
+  background:linear-gradient(160deg,var(--white) 0%,var(--mist) 50%,var(--sky) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.hero-sub {
+  font-size:1rem; line-height:1.75; color:var(--mist); opacity:0.75;
+  max-width:600px; margin:0 auto 50px; letter-spacing:0.02em;
+}
+.actions { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+.btn-p {
+  padding:14px 34px;
+  background:linear-gradient(135deg,var(--aegean),var(--cerulean));
+  color:var(--white); border:none; border-radius:6px;
+  font-family:'Josefin Sans',sans-serif;
+  font-size:0.68rem; letter-spacing:0.2em; text-transform:uppercase;
+  cursor:pointer; text-decoration:none;
+  box-shadow:0 8px 32px rgba(47,128,212,0.35);
+  transition:transform 0.2s, box-shadow 0.2s;
+}
+.btn-p:hover { transform:translateY(-2px); box-shadow:0 14px 40px rgba(47,128,212,0.5); }
+.btn-g {
+  padding:13px 34px; background:transparent; color:var(--mist);
+  border:1px solid rgba(189,216,244,0.25); border-radius:6px;
+  font-family:'Josefin Sans',sans-serif;
+  font-size:0.68rem; letter-spacing:0.2em; text-transform:uppercase;
+  cursor:pointer; text-decoration:none;
+  transition:border-color 0.25s, color 0.25s, background 0.25s;
+}
+.btn-g:hover { border-color:var(--sky); color:var(--white); background:rgba(111,174,232,0.08); }
 
-  #typewriter-text {
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: 300;
-    font-size: clamp(1.4rem, 3.5vw, 2.8rem);
-    letter-spacing: 0.08em;
-    color: var(--villa);
-    white-space: nowrap;
+/* METRICS */
+.metrics {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:1px; background:rgba(111,174,232,0.1);
+  border-top:1px solid rgba(111,174,232,0.1);
+  border-bottom:1px solid rgba(111,174,232,0.1);
+}
+.metric { padding:48px 32px; background:var(--navy); text-align:center; transition:background 0.3s; }
+.metric:hover { background:rgba(15,48,104,0.6); }
+.metric-n {
+  font-size:3rem; font-weight:200;
+  background:linear-gradient(135deg,var(--white),var(--sky));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  line-height:1; margin-bottom:12px;
+}
+.metric-l { font-size:0.62rem; letter-spacing:0.26em; text-transform:uppercase; color:var(--mist); opacity:0.55; }
 
-    /* gradient shimmer as text color */
-    background: linear-gradient(90deg, var(--sky), var(--villa) 50%, var(--mist));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
+/* SERVICES SECTION */
+.section { padding:100px 60px; max-width:1200px; margin:0 auto; }
+.sec-label { font-size:0.62rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--sky); opacity:0.7; margin-bottom:18px; }
+.sec-title {
+  font-weight:100; font-size:clamp(1.8rem,4vw,3rem); line-height:1.18; margin-bottom:56px;
+  background:linear-gradient(135deg,var(--white) 0%,var(--mist) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  max-width:500px;
+}
+.svc-grid {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:2px; background:rgba(111,174,232,0.08);
+  border:1px solid rgba(111,174,232,0.08); border-radius:12px; overflow:hidden;
+}
+.svc-card {
+  padding:40px 34px; background:rgba(8,20,46,0.95);
+  cursor:pointer; position:relative; transition:background 0.3s; overflow:hidden;
+}
+.svc-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,transparent,var(--cerulean),transparent);
+  opacity:0; transition:opacity 0.3s;
+}
+.svc-card:hover { background:rgba(15,48,104,0.7); }
+.svc-card:hover::before { opacity:1; }
+.a-icon { display:block; margin-bottom:22px; }
+.a-icon svg { transition:filter 0.3s; filter:drop-shadow(0 0 5px rgba(111,174,232,0.3)); }
+.svc-card:hover .a-icon svg { filter:drop-shadow(0 0 12px rgba(111,174,232,0.9)); }
+.svc-name { font-size:0.96rem; font-weight:400; color:var(--white); margin-bottom:12px; }
+.svc-desc { font-size:0.82rem; line-height:1.72; color:var(--mist); opacity:0.6; }
+.svc-tag {
+  display:inline-block; margin-top:20px;
+  font-size:0.58rem; letter-spacing:0.22em; text-transform:uppercase;
+  color:var(--sky); border:1px solid rgba(111,174,232,0.2);
+  padding:4px 10px; border-radius:3px; opacity:0.75;
+}
 
-  #cursor {
-    display: inline-block;
-    width: 2px;
-    height: 1.15em;
-    background: var(--sky);
-    margin-left: 4px;
-    vertical-align: middle;
-    animation: blink 0.75s step-end infinite;
-  }
+/* PROCESS */
+.proc-wrap { padding:80px 60px; background:linear-gradient(180deg,transparent,rgba(15,48,104,0.12),transparent); }
+.proc-inner { max-width:1100px; margin:0 auto; }
+.steps { display:grid; grid-template-columns:repeat(4,1fr); margin-top:52px; position:relative; }
+.steps::before {
+  content:''; position:absolute; top:26px; left:12.5%; width:75%; height:1px;
+  background:linear-gradient(90deg,transparent,var(--cerulean) 20%,var(--cerulean) 80%,transparent);
+  opacity:0.22;
+}
+.step { padding:0 18px; text-align:center; }
+.step-n {
+  width:52px; height:52px; border-radius:50%;
+  background:linear-gradient(135deg,var(--sapphire),var(--aegean));
+  display:flex; align-items:center; justify-content:center;
+  margin:0 auto 20px;
+  font-size:0.7rem; color:var(--sky);
+  border:1px solid rgba(111,174,232,0.25); position:relative; z-index:1;
+  box-shadow:0 0 18px rgba(47,128,212,0.18);
+}
+.step-t { font-size:0.86rem; font-weight:400; color:var(--white); margin-bottom:8px; }
+.step-d { font-size:0.74rem; line-height:1.65; color:var(--mist); opacity:0.5; }
 
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 0; }
-  }
+/* CTA */
+.cta-wrap { padding:100px 60px; text-align:center; position:relative; overflow:hidden; }
+.cta-wrap::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse at center,rgba(47,128,212,0.1),transparent 70%);
+  pointer-events:none;
+}
+.cta-title {
+  font-weight:100; font-size:clamp(1.8rem,4.5vw,3.2rem); line-height:1.15; margin-bottom:16px;
+  background:linear-gradient(135deg,var(--white),var(--mist));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  max-width:640px; margin:0 auto 16px;
+}
+.cta-sub { font-size:0.9rem; color:var(--mist); opacity:0.58; margin-bottom:46px; letter-spacing:0.03em; }
 
-  /* ── LOGO TOP-LEFT (post animation) ── */
-  #logo-fixed {
-    position: fixed;
-    top: 28px;
-    left: 36px;
-    z-index: 999;
-    opacity: 0;
-    transform: translateY(6px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
-    cursor: pointer;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+/* FOOTER */
+footer {
+  border-top:1px solid rgba(111,174,232,0.1);
+  padding:38px 60px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;
+}
+.f-brand { font-size:0.68rem; letter-spacing:0.22em; color:var(--sky); opacity:0.55; }
+.f-copy  { font-size:0.68rem; color:var(--mist); opacity:0.3; }
 
-  #logo-fixed.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* SERVICE DETAIL PAGES */
+.sp { max-width:900px; margin:0 auto; padding:110px 60px 80px; }
+.back-btn {
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:'Josefin Sans',sans-serif;
+  font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase;
+  color:var(--sky); cursor:pointer; margin-bottom:52px;
+  opacity:0.7; transition:opacity 0.2s; background:none; border:none; padding:0;
+}
+.back-btn:hover { opacity:1; }
+.sp-tag  { font-size:0.6rem; letter-spacing:0.28em; text-transform:uppercase; color:var(--sky); opacity:0.65; margin-bottom:16px; }
+.sp-h1 {
+  font-weight:100; font-size:clamp(2rem,5vw,3.8rem); line-height:1.15; margin-bottom:26px;
+  background:linear-gradient(160deg,var(--white) 0%,var(--mist) 60%,var(--sky) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.sp-div { width:54px; height:1px; background:linear-gradient(90deg,var(--cerulean),transparent); margin-bottom:28px; }
+.sp-body { font-size:0.95rem; line-height:1.85; color:var(--mist); opacity:0.72; max-width:640px; margin-bottom:42px; }
+.sp-pts {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:2px; background:rgba(111,174,232,0.08);
+  border:1px solid rgba(111,174,232,0.08); border-radius:10px; overflow:hidden; margin-bottom:46px;
+}
+.sp-pt { padding:28px 24px; background:rgba(8,20,46,0.95); }
+.sp-pn { font-size:0.56rem; letter-spacing:0.28em; color:var(--sky); opacity:0.55; margin-bottom:9px; }
+.sp-pt-t { font-size:0.86rem; font-weight:400; color:var(--white); margin-bottom:7px; }
+.sp-pt-d { font-size:0.75rem; line-height:1.62; color:var(--mist); opacity:0.52; }
 
-  #logo-fixed .logo-mark {
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 0.85rem;
-    letter-spacing: 0.22em;
-    font-weight: 400;
-    text-transform: lowercase;
-    color: var(--sky);
-    border: 1px solid rgba(111,174,232,0.35);
-    padding: 5px 11px;
-    border-radius: 4px;
-    background: rgba(15,48,104,0.4);
-    backdrop-filter: blur(8px);
-  }
-
-  #logo-fixed .logo-name {
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: 200;
-    font-size: 0.7rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--mist);
-    opacity: 0.7;
-  }
-
-  /* ── MAIN CONTENT ── */
-  #main {
-    opacity: 0;
-    transition: opacity 1s ease 0.2s;
-    min-height: 100vh;
-  }
-
-  #main.visible { opacity: 1; }
-
-  /* NAV */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    padding: 26px 40px 26px 220px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 40px;
-    z-index: 100;
-    background: linear-gradient(to bottom, rgba(8,20,46,0.9) 0%, transparent 100%);
-  }
-
-  nav a {
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 0.72rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--mist);
-    text-decoration: none;
-    opacity: 0.7;
-    transition: opacity 0.25s, color 0.25s;
-  }
-  nav a:hover { opacity: 1; color: var(--white); }
-
-  nav .nav-cta {
-    background: linear-gradient(135deg, var(--aegean), var(--cerulean));
-    color: var(--white) !important;
-    opacity: 1 !important;
-    padding: 9px 22px;
-    border-radius: 5px;
-    font-size: 0.68rem;
-    letter-spacing: 0.2em;
-    transition: transform 0.2s, box-shadow 0.2s !important;
-    box-shadow: 0 4px 20px rgba(47,128,212,0.3);
-  }
-  nav .nav-cta:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 28px rgba(47,128,212,0.5);
-  }
-
-  /* HERO */
-  .hero {
-    min-height: 100vh;
-    display: grid;
-    place-items: center;
-    position: relative;
-    overflow: hidden;
-    padding: 120px 60px 80px;
-  }
-
-  /* gradient orbs */
-  .hero::before {
-    content: '';
-    position: absolute;
-    width: 700px; height: 700px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(47,128,212,0.18) 0%, transparent 70%);
-    top: -100px; right: -100px;
-    pointer-events: none;
-  }
-  .hero::after {
-    content: '';
-    position: absolute;
-    width: 500px; height: 500px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(15,48,104,0.4) 0%, transparent 70%);
-    bottom: -80px; left: -80px;
-    pointer-events: none;
-  }
-
-  /* grid lines */
-  .grid-overlay {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(111,174,232,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(111,174,232,0.04) 1px, transparent 1px);
-    background-size: 60px 60px;
-    pointer-events: none;
-  }
-
-  .hero-inner {
-    position: relative;
-    z-index: 2;
-    max-width: 880px;
-    text-align: center;
-  }
-
-  .hero-eyebrow {
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 0.7rem;
-    letter-spacing: 0.32em;
-    text-transform: uppercase;
-    color: var(--sky);
-    margin-bottom: 32px;
-    opacity: 0.8;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 14px;
-  }
-
-  .hero-eyebrow::before,
-  .hero-eyebrow::after {
-    content: '';
-    flex: 1;
-    max-width: 60px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--sky));
-  }
-  .hero-eyebrow::after {
-    background: linear-gradient(90deg, var(--sky), transparent);
-  }
-
-  .hero-headline {
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: 100;
-    font-size: clamp(2.8rem, 6vw, 5.2rem);
-    line-height: 1.12;
-    letter-spacing: -0.01em;
-    margin-bottom: 30px;
-    background: linear-gradient(160deg, var(--white) 0%, var(--mist) 50%, var(--sky) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .hero-sub {
-    font-size: 1.05rem;
-    font-weight: 300;
-    line-height: 1.75;
-    color: var(--mist);
-    opacity: 0.75;
-    max-width: 600px;
-    margin: 0 auto 52px;
-    letter-spacing: 0.02em;
-  }
-
-  .hero-actions {
-    display: flex;
-    gap: 18px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .btn-primary {
-    padding: 15px 36px;
-    background: linear-gradient(135deg, var(--aegean) 0%, var(--cerulean) 100%);
-    color: var(--white);
-    border: none;
-    border-radius: 6px;
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 0.72rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    cursor: pointer;
-    text-decoration: none;
-    box-shadow: 0 8px 32px rgba(47,128,212,0.35);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 14px 40px rgba(47,128,212,0.5);
-  }
-
-  .btn-ghost {
-    padding: 14px 36px;
-    background: transparent;
-    color: var(--mist);
-    border: 1px solid rgba(189,216,244,0.25);
-    border-radius: 6px;
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 0.72rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    cursor: pointer;
-    text-decoration: none;
-    transition: border-color 0.25s, color 0.25s, background 0.25s;
-  }
-  .btn-ghost:hover {
-    border-color: var(--sky);
-    color: var(--white);
-    background: rgba(111,174,232,0.08);
-  }
-
-  /* METRICS BAND */
-  .metrics {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: rgba(111,174,232,0.1);
-    border-top: 1px solid rgba(111,174,232,0.1);
-    border-bottom: 1px solid rgba(111,174,232,0.1);
-  }
-
-  .metric {
-    padding: 52px 40px;
-    background: var(--navy);
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    transition: background 0.3s;
-  }
-  .metric:hover { background: rgba(15,48,104,0.6); }
-  .metric::before {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 50%;
-    transform: translateX(-50%);
-    width: 40px; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--cerulean), transparent);
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  .metric:hover::before { opacity: 1; }
-
-  .metric-num {
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 3.2rem;
-    font-weight: 200;
-    background: linear-gradient(135deg, var(--white), var(--sky));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    line-height: 1;
-    margin-bottom: 12px;
-  }
-
-  .metric-label {
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 0.65rem;
-    letter-spacing: 0.26em;
-    text-transform: uppercase;
-    color: var(--mist);
-    opacity: 0.6;
-  }
-
-  /* SERVICES */
-  .section {
-    padding: 120px 60px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .section-label {
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 0.65rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--sky);
-    margin-bottom: 20px;
-    opacity: 0.7;
-  }
-
-  .section-title {
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: 300;
-    font-size: clamp(2rem, 4vw, 3.2rem);
-    line-height: 1.18;
-    margin-bottom: 64px;
-    background: linear-gradient(135deg, var(--white) 0%, var(--mist) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    max-width: 540px;
-  }
-
-  .services-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2px;
-    background: rgba(111,174,232,0.08);
-    border: 1px solid rgba(111,174,232,0.08);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-
-  .service-card {
-    padding: 44px 38px;
-    background: rgba(8,20,46,0.95);
-    position: relative;
-    transition: background 0.3s;
-    overflow: hidden;
-  }
-  .service-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--cerulean), transparent);
-    opacity: 0;
-    transition: opacity 0.4s;
-  }
-  .service-card:hover { background: rgba(15,48,104,0.7); }
-  .service-card:hover::before { opacity: 1; }
-
-  .service-icon {
-    font-size: 1.5rem;
-    margin-bottom: 22px;
-    display: block;
-    filter: drop-shadow(0 0 8px rgba(111,174,232,0.5));
-  }
-
-  .service-name {
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: 400;
-    font-size: 1.05rem;
-    color: var(--white);
-    margin-bottom: 14px;
-    letter-spacing: 0.02em;
-  }
-
-  .service-desc {
-    font-size: 0.85rem;
-    line-height: 1.7;
-    color: var(--mist);
-    opacity: 0.65;
-  }
-
-  .service-tag {
-    display: inline-block;
-    margin-top: 22px;
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 0.6rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--sky);
-    border: 1px solid rgba(111,174,232,0.2);
-    padding: 4px 10px;
-    border-radius: 3px;
-    opacity: 0.8;
-  }
-
-  /* PROCESS */
-  .process-section {
-    padding: 100px 60px;
-    background: linear-gradient(180deg, transparent, rgba(15,48,104,0.15), transparent);
-  }
-  .process-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-  .process-steps {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0;
-    margin-top: 60px;
-    position: relative;
-  }
-  .process-steps::before {
-    content: '';
-    position: absolute;
-    top: 28px; left: 12.5%;
-    width: 75%; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--cerulean) 20%, var(--cerulean) 80%, transparent);
-    opacity: 0.3;
-  }
-  .step {
-    padding: 0 24px;
-    text-align: center;
-  }
-  .step-num {
-    width: 56px; height: 56px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--sapphire), var(--aegean));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 24px;
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 0.78rem;
-    color: var(--sky);
-    border: 1px solid rgba(111,174,232,0.25);
-    position: relative;
-    z-index: 1;
-    box-shadow: 0 0 24px rgba(47,128,212,0.2);
-  }
-  .step-title {
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: 400;
-    font-size: 0.92rem;
-    color: var(--white);
-    margin-bottom: 10px;
-  }
-  .step-desc {
-    font-size: 0.78rem;
-    line-height: 1.65;
-    color: var(--mist);
-    opacity: 0.55;
-  }
-
-  /* CTA SECTION */
-  .cta-section {
-    padding: 120px 60px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .cta-section::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at center, rgba(47,128,212,0.1) 0%, transparent 70%);
-    pointer-events: none;
-  }
-  .cta-section .section-title {
-    max-width: 680px;
-    margin: 0 auto 20px;
-    text-align: center;
-    font-size: clamp(2rem, 4.5vw, 3.5rem);
-  }
-  .cta-sub {
-    font-size: 0.95rem;
-    color: var(--mist);
-    opacity: 0.6;
-    margin-bottom: 50px;
-    letter-spacing: 0.04em;
-  }
-
-  /* FOOTER */
-  footer {
-    border-top: 1px solid rgba(111,174,232,0.1);
-    padding: 44px 60px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  .footer-brand {
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 0.7rem;
-    letter-spacing: 0.22em;
-    color: var(--sky);
-    opacity: 0.6;
-  }
-  .footer-copy {
-    font-size: 0.72rem;
-    color: var(--mist);
-    opacity: 0.35;
-    letter-spacing: 0.08em;
-  }
-
-  /* RESPONSIVE */
-  @media (max-width: 768px) {
-    /* Logo: hide full name on mobile */
-    #logo-fixed { top: 20px; left: 20px; gap: 0; }
-    #logo-fixed .logo-name { display: none; }
-
-    /* Nav: hide text links, only show CTA button */
-    nav {
-      padding: 16px 20px;
-      justify-content: flex-end;
-      gap: 0;
-    }
-    nav a:not(.nav-cta) { display: none; }
-    nav .nav-cta { padding: 8px 16px; font-size: 0.62rem; }
-
-    /* Hero */
-    .hero { padding: 70px 24px 60px; }
-    .hero-eyebrow { font-size: 0.58rem; letter-spacing: 0.16em; }
-    .hero-sub { font-size: 0.9rem; }
-    .hero-actions { flex-direction: column; align-items: center; }
-    .btn-primary, .btn-ghost { width: 100%; max-width: 300px; text-align: center; }
-
-    /* Metrics */
-    .metrics { grid-template-columns: 1fr; }
-    .metric { padding: 36px 28px; }
-
-    /* Sections */
-    .section { padding: 64px 24px; }
-    .services-grid { grid-template-columns: 1fr; }
-
-    /* Process */
-    .process-section { padding: 64px 24px; }
-    .process-steps { grid-template-columns: 1fr 1fr; gap: 36px 16px; }
-    .process-steps::before { display: none; }
-    .step { padding: 0 8px; }
-
-    /* CTA */
-    .cta-section { padding: 64px 24px; }
-
-    /* Footer */
-    footer { padding: 32px 24px; flex-direction: column; text-align: center; gap: 12px; }
-  }
-
-  @media (max-width: 400px) {
-    .process-steps { grid-template-columns: 1fr; }
-  }
+/* RESPONSIVE */
+@media (max-width:768px) {
+  .logo-name { display:none; }
+  nav { padding:18px 20px; }
+  nav a:not(.cta) { display:none; }
+  .hero { padding:70px 24px 60px; }
+  .actions { flex-direction:column; align-items:center; }
+  .btn-p,.btn-g { width:100%; max-width:300px; text-align:center; }
+  .metrics { grid-template-columns:1fr; }
+  .section { padding:64px 24px; }
+  .svc-grid { grid-template-columns:1fr; }
+  .proc-wrap { padding:60px 24px; }
+  .steps { grid-template-columns:1fr 1fr; gap:36px 12px; }
+  .steps::before { display:none; }
+  .cta-wrap { padding:64px 24px; }
+  footer { padding:28px 24px; flex-direction:column; text-align:center; }
+  .sp { padding:100px 24px 60px; }
+}
+@media (max-width:400px) { .steps { grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
 
-<!-- INTRO ANIMATION -->
+<!-- INTRO -->
 <div id="intro">
-  <div id="typewriter-wrap">
-    <span id="typewriter-text"></span>
-    <span id="cursor"></span>
+  <div id="tw-wrap" style="display:flex;align-items:center;">
+    <span id="tw-text"></span><span id="tw-cursor"></span>
   </div>
 </div>
 
-<!-- LOGO (appears after animation) -->
-<a href="#" id="logo-fixed">
-  <span class="logo-mark">api</span>
-  <span class="logo-name">Anchor Point Intelligence</span>
-</a>
+<!-- SERVICE PAGES (behind curtain) -->
+<div id="svc-audit" class="svc-page">
+  <div class="sp">
+    <button class="back-btn" onclick="raiseCurtain()">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><line x1="13" y1="8" x2="3" y2="8" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round"/><polyline points="7,4 3,8 7,12" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      Back to Home
+    </button>
+    <p class="sp-tag">Entry Engagement</p>
+    <h1 class="sp-h1">Database Architecture Audit</h1>
+    <div class="sp-div"></div>
+    <p class="sp-body">Before you can unify your data, you need to understand it. We conduct a thorough audit of every system, database, and data flow in your organization, then deliver a clear, actionable infrastructure roadmap.</p>
+    <div class="sp-pts">
+      <div class="sp-pt"><div class="sp-pn">01</div><div class="sp-pt-t">System Mapping</div><p class="sp-pt-d">Every database, tool, and data source documented in one place.</p></div>
+      <div class="sp-pt"><div class="sp-pn">02</div><div class="sp-pt-t">Gap Analysis</div><p class="sp-pt-d">Bottlenecks, redundancies, and missing connections identified.</p></div>
+      <div class="sp-pt"><div class="sp-pn">03</div><div class="sp-pt-t">Infrastructure Roadmap</div><p class="sp-pt-d">A prioritized plan to clean, connect, and future-proof your stack.</p></div>
+    </div>
+    <a href="#" class="btn-p">Book a Discovery Call</a>
+  </div>
+</div>
 
-<!-- MAIN PAGE -->
-<div id="main">
+<div id="svc-integration" class="svc-page">
+  <div class="sp">
+    <button class="back-btn" onclick="raiseCurtain()">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><line x1="13" y1="8" x2="3" y2="8" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round"/><polyline points="7,4 3,8 7,12" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      Back to Home
+    </button>
+    <p class="sp-tag">Core Service</p>
+    <h1 class="sp-h1">Systems Integration</h1>
+    <div class="sp-div"></div>
+    <p class="sp-body">Your CRM, ERP, custom databases, and spreadsheets each hold a piece of the truth. We build the integration layer that connects them all into a single, reliable data pipeline your entire organization can depend on.</p>
+    <div class="sp-pts">
+      <div class="sp-pt"><div class="sp-pn">01</div><div class="sp-pt-t">API Architecture</div><p class="sp-pt-d">Clean, documented connections between every system in your stack.</p></div>
+      <div class="sp-pt"><div class="sp-pn">02</div><div class="sp-pt-t">Data Normalization</div><p class="sp-pt-d">Consistent formats, schemas, and naming across all sources.</p></div>
+      <div class="sp-pt"><div class="sp-pn">03</div><div class="sp-pt-t">Real-Time Sync</div><p class="sp-pt-d">Live data pipelines so your information is always current.</p></div>
+    </div>
+    <a href="#" class="btn-p">Book a Discovery Call</a>
+  </div>
+</div>
+
+<div id="svc-dashboard" class="svc-page">
+  <div class="sp">
+    <button class="back-btn" onclick="raiseCurtain()">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><line x1="13" y1="8" x2="3" y2="8" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round"/><polyline points="7,4 3,8 7,12" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      Back to Home
+    </button>
+    <p class="sp-tag">Signature Deliverable</p>
+    <h1 class="sp-h1">Custom Intelligence Dashboard</h1>
+    <div class="sp-div"></div>
+    <p class="sp-body">A single command center built entirely around how your business actually runs. Every KPI, every system, every team visible in one place. No templates, no compromises. Built for the way you make decisions.</p>
+    <div class="sp-pts">
+      <div class="sp-pt"><div class="sp-pn">01</div><div class="sp-pt-t">Custom Design</div><p class="sp-pt-d">Built around your KPIs, not a generic template.</p></div>
+      <div class="sp-pt"><div class="sp-pn">02</div><div class="sp-pt-t">Live Data</div><p class="sp-pt-d">Pulls from all connected systems in real time.</p></div>
+      <div class="sp-pt"><div class="sp-pn">03</div><div class="sp-pt-t">Role-Based Views</div><p class="sp-pt-d">The right data for each person, nothing more.</p></div>
+    </div>
+    <a href="#" class="btn-p">Book a Discovery Call</a>
+  </div>
+</div>
+
+<div id="svc-retainer" class="svc-page">
+  <div class="sp">
+    <button class="back-btn" onclick="raiseCurtain()">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><line x1="13" y1="8" x2="3" y2="8" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round"/><polyline points="7,4 3,8 7,12" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      Back to Home
+    </button>
+    <p class="sp-tag">Monthly Retainer</p>
+    <h1 class="sp-h1">Ongoing Infrastructure Retainer</h1>
+    <div class="sp-div"></div>
+    <p class="sp-body">Once your infrastructure is built, it needs to grow with you. We stay on as your dedicated data engineering partner: monitoring systems, adding integrations, running quarterly health reviews, and evolving your dashboard as your business changes.</p>
+    <div class="sp-pts">
+      <div class="sp-pt"><div class="sp-pn">01</div><div class="sp-pt-t">System Monitoring</div><p class="sp-pt-d">Proactive oversight so issues are caught before they cost you.</p></div>
+      <div class="sp-pt"><div class="sp-pn">02</div><div class="sp-pt-t">Ongoing Development</div><p class="sp-pt-d">New features, integrations, and improvements each month.</p></div>
+      <div class="sp-pt"><div class="sp-pn">03</div><div class="sp-pt-t">Quarterly Reviews</div><p class="sp-pt-d">Strategic infrastructure reviews aligned to your business goals.</p></div>
+    </div>
+    <a href="#" class="btn-p">Book a Discovery Call</a>
+  </div>
+</div>
+
+<!-- HOME CURTAIN -->
+<div id="home-curtain">
+
+  <a href="#" id="logo">
+    <span class="logo-mark">api</span>
+    <span class="logo-name">Anchor Point Intelligence</span>
+  </a>
+
   <nav>
     <a href="#">Services</a>
     <a href="#">Process</a>
     <a href="#">Case Studies</a>
-    <a href="#" class="nav-cta">Book Discovery Call</a>
+    <a href="#" class="cta">Book Discovery Call</a>
   </nav>
 
   <!-- HERO -->
   <section class="hero">
-    <div class="grid-overlay"></div>
+    <div class="hero-grid"></div>
+    <div class="orb1"></div>
+    <div class="orb2"></div>
     <div class="hero-inner">
-      <p class="hero-eyebrow">Data Infrastructure · Intelligence Systems</p>
-      <h1 class="hero-headline">One view.<br>Every system.<br>Total clarity.</h1>
+      <p class="eyebrow">Data Infrastructure · Intelligence Systems</p>
+      <h1>One view.<br>Every system.<br>Total clarity.</h1>
       <p class="hero-sub">We architect the data layer your business runs on, connecting every platform, database, and tool into a single intelligent command center.</p>
-      <div class="hero-actions">
-        <a href="#" class="btn-primary">Start with an Audit</a>
-        <a href="#" class="btn-ghost">See How It Works</a>
+      <div class="actions">
+        <a href="#" class="btn-p">Start with an Audit</a>
+        <a href="#" class="btn-g">See How It Works</a>
       </div>
     </div>
   </section>
 
   <!-- METRICS -->
   <div class="metrics">
-    <div class="metric">
-      <div class="metric-num">3–5×</div>
-      <div class="metric-label">Faster Decision Making</div>
-    </div>
-    <div class="metric">
-      <div class="metric-num">100%</div>
-      <div class="metric-label">Custom to Your Stack</div>
-    </div>
-    <div class="metric">
-      <div class="metric-num">1</div>
-      <div class="metric-label">Source of Truth</div>
-    </div>
+    <div class="metric"><div class="metric-n">3–5×</div><div class="metric-l">Faster Decision Making</div></div>
+    <div class="metric"><div class="metric-n">100%</div><div class="metric-l">Custom to Your Stack</div></div>
+    <div class="metric"><div class="metric-n">1</div><div class="metric-l">Source of Truth</div></div>
   </div>
 
   <!-- SERVICES -->
   <div class="section">
-    <p class="section-label">What We Do</p>
-    <h2 class="section-title">Infrastructure that thinks with you</h2>
-    <div class="services-grid">
-      <div class="service-card">
-        <span class="service-icon">⬡</span>
-        <div class="service-name">Database Architecture Audit</div>
-        <p class="service-desc">We map every data source in your organization, identify bottlenecks, redundancies, and missing links, then build the blueprint to fix them.</p>
-        <span class="service-tag">Entry Engagement</span>
+    <p class="sec-label">What We Do</p>
+    <h2 class="sec-title">Infrastructure that thinks with you</h2>
+    <div class="svc-grid">
+
+      <div class="svc-card" onclick="pullCurtain('audit',this)">
+        <span class="a-icon"><svg width="26" height="26" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="6" r="3.5" stroke="#6BAEE8" stroke-width="1.5"/><line x1="14" y1="9.5" x2="14" y2="14" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round"/><line x1="14" y1="14" x2="14" y2="22" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round"/><line x1="7" y1="14" x2="21" y2="14" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round"/><path d="M7 22 Q14 26 21 22" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg></span>
+        <div class="svc-name">Database Architecture Audit</div>
+        <p class="svc-desc">We map every data source in your organization, identify bottlenecks, redundancies, and missing links, then build the blueprint to fix them.</p>
+        <span class="svc-tag">Entry Engagement</span>
       </div>
-      <div class="service-card">
-        <span class="service-icon">◈</span>
-        <div class="service-name">Systems Integration</div>
-        <p class="service-desc">CRM, ERP, custom databases, spreadsheets: we connect your entire ecosystem through a clean, unified data layer your team can actually trust.</p>
-        <span class="service-tag">Core Service</span>
+
+      <div class="svc-card" onclick="pullCurtain('integration',this)">
+        <span class="a-icon"><svg width="26" height="26" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="6" r="3.5" stroke="#6BAEE8" stroke-width="1.5"/><line x1="14" y1="9.5" x2="14" y2="14" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round"/><line x1="14" y1="14" x2="14" y2="22" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round"/><line x1="7" y1="14" x2="21" y2="14" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round"/><path d="M7 22 Q14 26 21 22" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg></span>
+        <div class="svc-name">Systems Integration</div>
+        <p class="svc-desc">CRM, ERP, custom databases, spreadsheets: we connect your entire ecosystem through a clean, unified data layer your team can actually trust.</p>
+        <span class="svc-tag">Core Service</span>
       </div>
-      <div class="service-card">
-        <span class="service-icon">◉</span>
-        <div class="service-name">Custom Intelligence Dashboard</div>
-        <p class="service-desc">A single high-level command center that pulls live data from all systems. Built for your KPIs, your workflows, your team, not off-the-shelf compromises.</p>
-        <span class="service-tag">Signature Deliverable</span>
+
+      <div class="svc-card" onclick="pullCurtain('dashboard',this)">
+        <span class="a-icon"><svg width="26" height="26" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="6" r="3.5" stroke="#6BAEE8" stroke-width="1.5"/><line x1="14" y1="9.5" x2="14" y2="14" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round"/><line x1="14" y1="14" x2="14" y2="22" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round"/><line x1="7" y1="14" x2="21" y2="14" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round"/><path d="M7 22 Q14 26 21 22" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg></span>
+        <div class="svc-name">Custom Intelligence Dashboard</div>
+        <p class="svc-desc">A single high-level command center that pulls live data from all systems. Built for your KPIs, your workflows, your team, not off-the-shelf compromises.</p>
+        <span class="svc-tag">Signature Deliverable</span>
       </div>
-      <div class="service-card">
-        <span class="service-icon">⟁</span>
-        <div class="service-name">Ongoing Infrastructure Retainer</div>
-        <p class="service-desc">Your on-call data engineering team: monitoring, optimization, new integrations, and quarterly system health reviews. All without the overhead of a full hire.</p>
-        <span class="service-tag">Monthly Retainer</span>
+
+      <div class="svc-card" onclick="pullCurtain('retainer',this)">
+        <span class="a-icon"><svg width="26" height="26" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="6" r="3.5" stroke="#6BAEE8" stroke-width="1.5"/><line x1="14" y1="9.5" x2="14" y2="14" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round"/><line x1="14" y1="14" x2="14" y2="22" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round"/><line x1="7" y1="14" x2="21" y2="14" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round"/><path d="M7 22 Q14 26 21 22" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg></span>
+        <div class="svc-name">Ongoing Infrastructure Retainer</div>
+        <p class="svc-desc">Your on-call data engineering team: monitoring, optimization, new integrations, and quarterly system health reviews. All without the overhead of a full hire.</p>
+        <span class="svc-tag">Monthly Retainer</span>
       </div>
+
     </div>
   </div>
 
   <!-- PROCESS -->
-  <div class="process-section">
-    <div class="process-inner">
-      <p class="section-label">How We Work</p>
-      <h2 class="section-title">From audit to anchor in four steps</h2>
-      <div class="process-steps">
-        <div class="step">
-          <div class="step-num">01</div>
-          <div class="step-title">Discovery Audit</div>
-          <p class="step-desc">We assess your current data landscape, systems, and gaps, then deliver a clear infrastructure roadmap.</p>
-        </div>
-        <div class="step">
-          <div class="step-num">02</div>
-          <div class="step-title">Architecture Design</div>
-          <p class="step-desc">We design the integration layer and dashboard structure, scoped precisely to your business logic.</p>
-        </div>
-        <div class="step">
-          <div class="step-num">03</div>
-          <div class="step-title">Build & Connect</div>
-          <p class="step-desc">We build and deploy your unified infrastructure: tested, documented, and fully yours.</p>
-        </div>
-        <div class="step">
-          <div class="step-num">04</div>
-          <div class="step-title">Anchor & Retain</div>
-          <p class="step-desc">We stay on as your data partner, monitoring and evolving the system as your business grows.</p>
-        </div>
+  <div class="proc-wrap">
+    <div class="proc-inner">
+      <p class="sec-label">How We Work</p>
+      <h2 class="sec-title">From audit to anchor in four steps</h2>
+      <div class="steps">
+        <div class="step"><div class="step-n">01</div><div class="step-t">Discovery Audit</div><p class="step-d">We assess your current data landscape, systems, and gaps, then deliver a clear infrastructure roadmap.</p></div>
+        <div class="step"><div class="step-n">02</div><div class="step-t">Architecture Design</div><p class="step-d">We design the integration layer and dashboard structure, scoped precisely to your business logic.</p></div>
+        <div class="step"><div class="step-n">03</div><div class="step-t">Build and Connect</div><p class="step-d">We build and deploy your unified infrastructure: tested, documented, and fully yours.</p></div>
+        <div class="step"><div class="step-n">04</div><div class="step-t">Anchor and Retain</div><p class="step-d">We stay on as your data partner, monitoring and evolving the system as your business grows.</p></div>
       </div>
     </div>
   </div>
 
   <!-- CTA -->
-  <div class="cta-section">
-    <p class="section-label">Get Started</p>
-    <h2 class="section-title">Your data already knows the answer.</h2>
-    <p class="cta-sub">Book a free 30-minute strategy call. We'll identify your biggest data gap in the first conversation.</p>
-    <div class="hero-actions">
-      <a href="#" class="btn-primary">Book a Discovery Call</a>
-      <a href="#" class="btn-ghost">Download Capability Deck</a>
+  <div class="cta-wrap">
+    <p class="sec-label">Get Started</p>
+    <h2 class="cta-title">Your data already knows the answer.</h2>
+    <p class="cta-sub">Book a free 30-minute strategy call. We will identify your biggest data gap in the first conversation.</p>
+    <div class="actions">
+      <a href="#" class="btn-p">Book a Discovery Call</a>
+      <a href="#" class="btn-g">Download Capability Deck</a>
     </div>
   </div>
 
   <!-- FOOTER -->
   <footer>
-    <div class="footer-brand">API · Anchor Point Intelligence</div>
-    <div class="footer-copy">© 2026 Anchor Point Intelligence. All rights reserved.</div>
+    <div class="f-brand">API · Anchor Point Intelligence</div>
+    <div class="f-copy">© 2026 Anchor Point Intelligence. All rights reserved.</div>
   </footer>
+
+</div><!-- /home-curtain -->
+
+<!-- FLYING ANCHOR: lives at body level to avoid stacking context issues -->
+<div id="fly-anchor" style="position:fixed;z-index:9998;pointer-events:none;opacity:0;transform:translate(-50%,-50%);">
+  <svg width="34" height="34" viewBox="0 0 28 28" fill="none">
+    <circle cx="14" cy="6" r="3.5" stroke="#6BAEE8" stroke-width="1.5"/>
+    <line x1="14" y1="9.5" x2="14" y2="14" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="14" y1="14" x2="14" y2="22" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="7" y1="14" x2="21" y2="14" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M7 22 Q14 26 21 22" stroke="#6BAEE8" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+  </svg>
 </div>
 
 <script>
-const FULL_TEXT = "Anchor Point Intelligence";
-const SHORT_TEXT = "api";
+// ── TYPEWRITER ──
+const FULL  = "Anchor Point Intelligence";
+const SHORT = "api";
+const twText   = document.getElementById('tw-text');
+const twCursor = document.getElementById('tw-cursor');
+const introEl  = document.getElementById('intro');
+const logoEl   = document.getElementById('logo');
+let idx = 0;
 
-const el = document.getElementById('typewriter-text');
-const cursor = document.getElementById('cursor');
-const intro = document.getElementById('intro');
-const logoFixed = document.getElementById('logo-fixed');
-const main = document.getElementById('main');
-
-let i = 0;
-
-// Phase 1: Type out full name
-function typeForward() {
-  if (i < FULL_TEXT.length) {
-    el.textContent = FULL_TEXT.slice(0, ++i);
-    setTimeout(typeForward, 58 + Math.random() * 40);
+function typeOn() {
+  if (idx < FULL.length) {
+    twText.textContent = FULL.slice(0, ++idx);
+    setTimeout(typeOn, 60 + Math.random() * 38);
   } else {
-    // Done typing — wait 400ms then reverse
-    setTimeout(reverseToShort, 400);
+    setTimeout(typeOff, 420);
   }
 }
 
-// Phase 2: Delete all the way, then snap "api", then fly
-function reverseToShort() {
-  deleteAll();
-}
-
-function deleteAll() {
-  if (el.textContent.length > 0) {
-    el.textContent = el.textContent.slice(0, -1);
-    setTimeout(deleteAll, 10 + Math.random() * 8);
+function typeOff() {
+  if (twText.textContent.length > 0) {
+    twText.textContent = twText.textContent.slice(0, -1);
+    setTimeout(typeOff, 10 + Math.random() * 8);
   } else {
-    // Snap "api" in instantly
-    el.textContent = SHORT_TEXT;
-    setTimeout(flyToCorner, 180);
+    twText.textContent = SHORT;
+    setTimeout(flyAway, 200);
   }
 }
 
-function flyToCorner() {
-  cursor.style.display = 'none';
+function flyAway() {
+  twCursor.style.display = 'none';
+  const wrap = document.getElementById('tw-wrap');
+  const r = wrap.getBoundingClientRect();
+  const sx = r.left + r.width / 2;
+  const sy = r.top  + r.height / 2;
 
-  const wrap = document.getElementById('typewriter-wrap');
-
-  // Measure where the text currently sits (center of screen)
-  const wrapRect = wrap.getBoundingClientRect();
-  const startX = wrapRect.left + wrapRect.width / 2;
-  const startY = wrapRect.top + wrapRect.height / 2;
-
-  // Where the logo-fixed mark will land (top-left)
-  // logo is at left:36, top:28, roughly 40px tall
-  const targetX = 36 + 40; // approx center of logo mark
-  const targetY = 28 + 20;
-
-  const dx = targetX - startX;
-  const dy = targetY - startY;
-
-  // Detach from flow, keep it visible at exact current position
   wrap.style.position = 'fixed';
-  wrap.style.left = startX + 'px';
-  wrap.style.top = startY + 'px';
-  wrap.style.transform = 'translate(-50%, -50%)';
-  wrap.style.margin = '0';
-  wrap.style.fontSize = 'clamp(1.4rem, 3.5vw, 2.8rem)';
+  wrap.style.left = sx + 'px';
+  wrap.style.top  = sy + 'px';
+  wrap.style.transform = 'translate(-50%,-50%)';
+  wrap.style.fontSize = 'clamp(1.4rem,4vw,2.8rem)';
 
-  // Force reflow before animating
-  wrap.getBoundingClientRect();
+  void wrap.offsetWidth; // reflow
 
-  // Animate: move to corner + shrink font
-  wrap.style.transition = 'left 0.65s cubic-bezier(0.5,0,0.2,1), top 0.65s cubic-bezier(0.5,0,0.2,1), font-size 0.55s cubic-bezier(0.5,0,0.2,1)';
-  wrap.style.left = targetX + 'px';
-  wrap.style.top = targetY + 'px';
-  wrap.style.fontSize = '0.85rem';
+  wrap.style.transition = 'left 0.7s cubic-bezier(0.5,0,0.2,1), top 0.7s cubic-bezier(0.5,0,0.2,1), font-size 0.6s ease';
+  wrap.style.left = '56px';
+  wrap.style.top  = '38px';
+  wrap.style.fontSize = '0.8rem';
 
-  // Once it arrives, swap to the real logo and reveal page
   setTimeout(() => {
-    intro.classList.add('fade-out');
-    logoFixed.classList.add('visible');
-    main.classList.add('visible');
-  }, 680);
+    introEl.style.transition = 'opacity 0.5s ease';
+    introEl.style.opacity = '0';
+    logoEl.classList.add('show');
+    setTimeout(() => { introEl.style.display = 'none'; }, 520);
+  }, 730);
 }
 
-// Kick off
-window.addEventListener('load', () => {
-  setTimeout(typeForward, 500);
-});
+window.addEventListener('load', () => setTimeout(typeOn, 350));
+
+// ── CURTAIN ──
+const curtain  = document.getElementById('home-curtain');
+const flyEl    = document.getElementById('fly-anchor');
+let activePage = null;
+
+function pullCurtain(id, card) {
+  if (activePage) activePage.classList.remove('active');
+  activePage = document.getElementById('svc-' + id);
+  activePage.classList.add('active');
+  activePage.scrollTop = 0;
+
+  const icon = card.querySelector('.a-icon svg');
+  const r = icon.getBoundingClientRect();
+  const cx = r.left + r.width  / 2;
+  const cy = r.top  + r.height / 2;
+
+  // Reset: no transition, position exactly over the clicked icon
+  flyEl.style.transition = 'none';
+  flyEl.style.transform  = 'translate(-50%, -50%)';
+  flyEl.style.left       = cx + 'px';
+  flyEl.style.top        = cy + 'px';
+  flyEl.style.opacity    = '1';
+
+  void flyEl.offsetWidth; // force reflow
+
+  // Animate drop
+  flyEl.style.transition = 'top 0.5s cubic-bezier(0.4,0,1,1), opacity 0.2s ease 0.32s';
+  flyEl.style.top        = (window.innerHeight + 60) + 'px';
+  flyEl.style.opacity    = '0';
+
+  setTimeout(() => curtain.classList.add('pull-down'), 140);
+}
+
+function raiseCurtain() {
+  curtain.classList.remove('pull-down');
+  curtain.scrollTop = 0;
+  setTimeout(() => {
+    if (activePage) { activePage.classList.remove('active'); activePage = null; }
+  }, 900);
+}
 </script>
 </body>
 </html>
