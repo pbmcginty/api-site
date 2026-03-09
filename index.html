@@ -323,7 +323,8 @@ footer {
 .modal-box {
   background:linear-gradient(165deg, rgba(15,48,104,0.6), rgba(8,20,46,0.95));
   border:1px solid rgba(111,174,232,0.15);
-  border-radius:12px; padding:48px 44px; width:90%; max-width:480px;
+  border-radius:12px; padding:48px 44px; width:90%; max-width:580px;
+  max-height:90vh; overflow-y:auto;
   transform:translateY(20px); transition:transform 0.35s ease;
 }
 #contact-modal.open .modal-box { transform:translateY(0); }
@@ -346,18 +347,76 @@ footer {
   color:var(--mist); opacity:0.6; margin-bottom:6px;
 }
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.form-group select {
   width:100%; background:rgba(8,20,46,0.7);
   border:1px solid rgba(111,174,232,0.2); border-radius:6px;
   padding:10px 14px; color:var(--villa);
   font-family:'Montserrat',sans-serif; font-size:0.82rem;
   outline:none; transition:border-color 0.2s;
 }
+.form-group select {
+  appearance:none; cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236BAEE8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 14px center;
+  padding-right:36px;
+}
+.form-group select option { background:var(--navy); color:var(--villa); }
 .form-group input:focus,
-.form-group textarea:focus { border-color:var(--cerulean); }
+.form-group textarea:focus,
+.form-group select:focus { border-color:var(--cerulean); }
 .form-group textarea { resize:vertical; min-height:80px; }
 .form-group input::placeholder,
 .form-group textarea::placeholder { color:var(--mist); opacity:0.3; }
+.form-other { margin-top:6px; display:none; }
+.form-group input.invalid { border-color:#e05252; }
+.form-group input.invalid::placeholder { color:#e05252; opacity:0.5; }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:0 16px; }
+.form-phase { display:none; }
+.form-phase.active { display:block; }
+.form-back-btn {
+  background:none; border:none; color:var(--sky); cursor:pointer;
+  font-family:'Montserrat',sans-serif; font-size:0.75rem; letter-spacing:0.1em;
+  margin-bottom:20px; padding:0; opacity:0.7; transition:opacity 0.2s;
+}
+.form-back-btn:hover { opacity:1; }
+.slot-section-label {
+  font-size:0.7rem; letter-spacing:0.12em; color:var(--mist);
+  opacity:0.6; margin-bottom:16px;
+}
+.slot-columns {
+  display:flex; gap:8px; overflow-x:auto; padding-bottom:8px;
+  scrollbar-width:thin; scrollbar-color:var(--sapphire) transparent;
+}
+.slot-date-col { min-width:110px; flex-shrink:0; }
+.slot-date-header {
+  font-size:0.62rem; letter-spacing:0.15em; text-transform:uppercase;
+  color:var(--sky); margin-bottom:10px; text-align:center; white-space:nowrap;
+}
+.slot-btn {
+  display:block; width:100%; margin-bottom:6px; padding:7px 8px;
+  font-family:'Montserrat',sans-serif; font-size:0.72rem;
+  color:var(--mist); background:rgba(8,20,46,0.7);
+  border:1px solid rgba(111,174,232,0.15); border-radius:4px;
+  cursor:pointer; transition:border-color 0.2s, background 0.2s, color 0.2s;
+  text-align:center;
+}
+.slot-btn:hover { border-color:var(--cerulean); background:rgba(15,48,104,0.5); }
+.slot-btn.selected {
+  background:linear-gradient(135deg,var(--aegean),var(--cerulean));
+  color:var(--white); border-color:var(--cerulean);
+}
+.slot-picker-loading {
+  text-align:center; padding:32px 0; color:var(--mist); opacity:0.6;
+}
+.slot-picker-loading p { margin-top:10px; font-size:0.78rem; }
+.slot-picker-empty {
+  text-align:center; padding:24px 0; color:var(--mist); opacity:0.5;
+  font-size:0.82rem; line-height:1.6;
+}
+.selected-slot-confirm {
+  text-align:center; padding:12px 0 4px; font-size:0.82rem; color:var(--sky);
+}
 .modal-submit {
   width:100%; margin-top:8px; padding:12px;
   font-family:'Montserrat',sans-serif; font-size:0.78rem; font-weight:400;
@@ -379,6 +438,11 @@ footer {
   nav { padding:22px 32px 22px 90px; }
 }
 @media (max-width:768px) {
+  .modal-box { padding:32px 24px; }
+  .form-row { grid-template-columns:1fr; }
+  .slot-columns { flex-direction:column; }
+  .slot-date-col { min-width:auto; display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
+  .slot-date-header { grid-column:1/-1; }
   nav { padding:18px 20px 18px 90px; }
   nav a:not(.cta) { display:none; }
   .hero { padding:70px 24px 60px; }
@@ -594,29 +658,59 @@ footer {
     <button class="modal-close" onclick="closeModal()">&times;</button>
     <p class="modal-label">Get Started</p>
     <h3 class="modal-title">Book a Discovery Call</h3>
-    <form id="contact-form" action="https://formsubmit.co/pmcginty@officeliquidation.com" method="POST">
-      <input type="hidden" name="_subject" value="New Discovery Call Request — API">
-      <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_next" value="https://anchorpointintelligence.com">
-      <input type="text" name="_honey" style="display:none">
-      <div class="form-group">
-        <label>Name</label>
-        <input type="text" name="name" placeholder="Your name" required>
+
+    <!-- PHASE 1: Contact Info -->
+    <div class="form-phase active" id="phase-info">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Name *</label>
+          <input type="text" id="f-name" placeholder="Your name" required>
+        </div>
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" id="f-email" placeholder="you@company.com" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Phone (optional)</label>
+          <input type="tel" id="f-phone" placeholder="(555) 123-4567">
+        </div>
+        <div class="form-group">
+          <label>Company (optional)</label>
+          <input type="text" id="f-company" placeholder="Company name">
+        </div>
       </div>
       <div class="form-group">
-        <label>Email</label>
-        <input type="email" name="email" placeholder="you@company.com" required>
-      </div>
-      <div class="form-group">
-        <label>Company (optional)</label>
-        <input type="text" name="company" placeholder="Company name">
+        <label>Current Software / Systems</label>
+        <input type="text" id="f-systems" placeholder="e.g. Salesforce, QuickBooks, SAP, custom databases...">
       </div>
       <div class="form-group">
         <label>What can we help with?</label>
-        <textarea name="message" placeholder="Tell us about your data challenges..."></textarea>
+        <textarea id="f-message" placeholder="Tell us about your data challenges..."></textarea>
       </div>
-      <button type="submit" class="modal-submit">Send Request</button>
-    </form>
+      <button type="button" class="modal-submit" id="btn-next">Next: Choose a Time &#8594;</button>
+    </div>
+
+    <!-- PHASE 2: Time Selection -->
+    <div class="form-phase" id="phase-time">
+      <button type="button" class="form-back-btn" id="btn-back">&#8592; Back</button>
+      <p class="slot-section-label">Select a 30-minute slot</p>
+      <div id="slot-picker" class="slot-picker">
+        <div class="slot-picker-loading">
+          <span class="anchor-loading">⚓</span>
+          <p>Loading availability...</p>
+        </div>
+      </div>
+      <div id="selected-slot-display" class="selected-slot-confirm" style="display:none"></div>
+      <button type="button" class="modal-submit" id="btn-book" disabled>Confirm Booking</button>
+    </div>
+
+    <!-- Success state -->
+    <div id="booking-success" class="modal-sent" style="display:none">
+      <div class="check-icon">⚓</div>
+      <p>You're booked!<br>Check your email for a calendar invite.<br>We look forward to speaking with you.</p>
+    </div>
   </div>
 </div>
 
@@ -776,21 +870,171 @@ function raiseCurtain() {
 
 // ── CONTACT MODAL ──
 const contactModal = document.getElementById('contact-modal');
-const contactForm  = document.getElementById('contact-form');
+const APPS_SCRIPT_URL = ''; // TODO: Add Apps Script URL when Google Workspace is ready
+let selectedSlot = null;
 
 function openModal() {
   contactModal.classList.add('open');
 }
 function closeModal() {
   contactModal.classList.remove('open');
+  // Reset to phase 1
+  document.getElementById('phase-info').classList.add('active');
+  document.getElementById('phase-time').classList.remove('active');
+  document.getElementById('booking-success').style.display = 'none';
+  document.getElementById('selected-slot-display').style.display = 'none';
+  document.getElementById('btn-book').disabled = true;
+  selectedSlot = null;
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-contactForm.addEventListener('submit', function() {
-  const btn = contactForm.querySelector('.modal-submit');
-  btn.innerHTML = '<span class="anchor-loading">⚓</span> Sending...';
+// Phase navigation
+document.getElementById('btn-next').addEventListener('click', () => {
+  const name = document.getElementById('f-name');
+  const email = document.getElementById('f-email');
+  name.classList.remove('invalid');
+  email.classList.remove('invalid');
+  let valid = true;
+  if (!name.value.trim()) { name.classList.add('invalid'); name.focus(); valid = false; }
+  if (!email.value.trim() || !email.validity.valid) { email.classList.add('invalid'); if (valid) email.focus(); valid = false; }
+  if (!valid) return;
+
+  // Clear invalid state on input
+  name.addEventListener('input', () => name.classList.remove('invalid'), { once:true });
+  email.addEventListener('input', () => email.classList.remove('invalid'), { once:true });
+
+  document.getElementById('phase-info').classList.remove('active');
+  document.getElementById('phase-time').classList.add('active');
+  fetchAvailability();
+});
+
+document.getElementById('btn-back').addEventListener('click', () => {
+  document.getElementById('phase-time').classList.remove('active');
+  document.getElementById('phase-info').classList.add('active');
+});
+
+// Fetch availability from Apps Script
+async function fetchAvailability() {
+  const picker = document.getElementById('slot-picker');
+  picker.innerHTML = '<div class="slot-picker-loading"><span class="anchor-loading">⚓</span><p>Loading availability...</p></div>';
+
+  if (!APPS_SCRIPT_URL) {
+    // Placeholder slots until Apps Script is set up
+    const slots = generatePlaceholderSlots();
+    renderSlots(slots);
+    return;
+  }
+
+  try {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const res = await fetch(APPS_SCRIPT_URL + '?tz=' + encodeURIComponent(tz));
+    const data = await res.json();
+    renderSlots(data.slots);
+  } catch (err) {
+    picker.innerHTML = '<div class="slot-picker-empty">Unable to load availability.<br>Please try again or email us directly.</div>';
+  }
+}
+
+// Placeholder slots for preview (removed once Apps Script is live)
+function generatePlaceholderSlots() {
+  const slots = [];
+  const now = new Date();
+  let d = new Date(now); d.setDate(d.getDate() + 1);
+  let count = 0;
+  while (count < 5) {
+    if (d.getDay() !== 0 && d.getDay() !== 6) {
+      const day = { date: d.toISOString().slice(0,10), label: d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}), times: [] };
+      for (let h = 9; h < 17; h++) {
+        for (let m = 0; m < 60; m += 30) {
+          const start = new Date(d); start.setHours(h,m,0,0);
+          const end = new Date(start); end.setMinutes(end.getMinutes()+30);
+          const label = start.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
+          day.times.push({ start:start.toISOString(), end:end.toISOString(), label });
+        }
+      }
+      slots.push(day);
+      count++;
+    }
+    d.setDate(d.getDate()+1);
+  }
+  return slots;
+}
+
+function renderSlots(slots) {
+  const picker = document.getElementById('slot-picker');
+  if (!slots || slots.length === 0) {
+    picker.innerHTML = '<div class="slot-picker-empty">No availability in the next two weeks.<br>Please email us directly.</div>';
+    return;
+  }
+  let html = '<div class="slot-columns">';
+  slots.forEach(day => {
+    html += '<div class="slot-date-col"><div class="slot-date-header">' + day.label + '</div>';
+    day.times.forEach(t => {
+      html += '<button class="slot-btn" data-start="' + t.start + '" data-end="' + t.end + '" data-label="' + day.label + ' at ' + t.label + '">' + t.label + '</button>';
+    });
+    html += '</div>';
+  });
+  html += '</div>';
+  picker.innerHTML = html;
+
+  picker.querySelectorAll('.slot-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      picker.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedSlot = { start:btn.dataset.start, end:btn.dataset.end };
+      document.getElementById('selected-slot-display').textContent = btn.dataset.label;
+      document.getElementById('selected-slot-display').style.display = 'block';
+      document.getElementById('btn-book').disabled = false;
+    });
+  });
+}
+
+// Book the slot
+document.getElementById('btn-book').addEventListener('click', async () => {
+  if (!selectedSlot) return;
+  const btn = document.getElementById('btn-book');
+  btn.innerHTML = '<span class="anchor-loading">⚓</span> Booking...';
   btn.disabled = true;
-  // Form submits naturally to Formsubmit.co, which redirects back to _next URL
+
+  const payload = {
+    name: document.getElementById('f-name').value.trim(),
+    email: document.getElementById('f-email').value.trim(),
+    phone: document.getElementById('f-phone').value.trim(),
+    company: document.getElementById('f-company').value.trim(),
+    systems: document.getElementById('f-systems').value.trim(),
+    message: document.getElementById('f-message').value.trim(),
+    slotStart: selectedSlot.start,
+    slotEnd: selectedSlot.end,
+    tz: Intl.DateTimeFormat().resolvedOptions().timeZone
+  };
+
+  if (!APPS_SCRIPT_URL) {
+    // No backend yet — show success preview
+    setTimeout(() => {
+      document.getElementById('phase-time').classList.remove('active');
+      document.getElementById('booking-success').style.display = 'block';
+    }, 800);
+    return;
+  }
+
+  try {
+    const res = await fetch(APPS_SCRIPT_URL, { method:'POST', body:JSON.stringify(payload) });
+    const data = await res.json();
+    if (data.success) {
+      document.getElementById('phase-time').classList.remove('active');
+      document.getElementById('booking-success').style.display = 'block';
+    } else {
+      alert(data.error || 'This slot is no longer available. Please choose another.');
+      btn.innerHTML = 'Confirm Booking';
+      btn.disabled = false;
+      selectedSlot = null;
+      fetchAvailability();
+    }
+  } catch (err) {
+    btn.innerHTML = 'Confirm Booking';
+    btn.disabled = false;
+    alert('Something went wrong. Please try again.');
+  }
 });
 
 // Wire up all CTA buttons

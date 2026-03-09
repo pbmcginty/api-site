@@ -10,24 +10,34 @@ Marketing/landing site for **Anchor Point Intelligence (API)** — a data infras
 
 ## Development
 
-No build, lint, or test commands. To preview, open `index.html` in a browser. The site is hosted via GitHub Pages.
+No build, lint, or test commands. To preview, open `index.html` in a browser.
 
 ## Architecture
 
-Everything lives in one self-contained `index.html`:
+Everything lives in one self-contained `index.html` (~815 lines):
 
-- **CSS** (lines 9–315): All styles are inline in a `<style>` block. Uses CSS custom properties defined in `:root` for the brand color palette (navy/sapphire/aegean/cerulean/sky/mist/villa/white). Responsive breakpoints at 768px and 400px.
-- **HTML** (lines 317–520): Static markup with a typewriter intro overlay, four service detail pages (`svc-audit`, `svc-integration`, `svc-dashboard`, `svc-retainer`), and a home curtain containing the hero, metrics, service cards, process steps, CTA, and footer.
-- **JavaScript** (lines 522–621): Two main systems:
-  - **Typewriter intro**: Types out "Anchor Point Intelligence", erases to "api", then animates the text into the logo position.
-  - **Curtain navigation**: `pullCurtain(id, card)` slides the home content down to reveal a service detail page; `raiseCurtain()` slides it back up. Uses a flying anchor SVG animation during the transition.
+- **CSS** (lines 9–393): All styles in a `<style>` block. CSS custom properties in `:root` for brand palette (navy/sapphire/aegean/cerulean/sky/mist/villa/white). Responsive breakpoints at 1024px (logo name hides), 768px (nav links hide, mobile layout), and 400px (single-column steps).
+- **HTML** (lines 395–622): Typewriter intro overlay, four service detail pages (`svc-audit`, `svc-integration`, `svc-dashboard`, `svc-retainer`), contact modal form, home curtain (hero, metrics, service cards, process steps, CTA, footer), and flying anchor element.
+- **JavaScript** (lines 624–815): Four systems:
+  - **Typewriter intro**: Types "anchor point intelligence" (lowercase), erases to "api", morphs with gradient into logo pill position.
+  - **Curtain navigation**: `pullCurtain(id, card)` — anchor wiggles then flies down, curtain slides to reveal service page. `raiseCurtain()` — restores scroll position.
+  - **Contact modal**: `openModal()`/`closeModal()` — form submits to Formsubmit.co (temporary, will be replaced by Google Apps Script booking system).
+  - **Nav scroll**: Services/Process/Case Studies links smooth-scroll to their sections.
 
 ## Conventions
 
-- Font: Josefin Sans (Google Fonts), predominantly weight 100–300
+- Font: Montserrat (Google Fonts), base weight 400, also uses 100/200/300/600
 - No external JS libraries or CSS frameworks
-- Inline SVG icons (anchor motif) used throughout
+- ⚓ emoji used as anchor icon throughout (replaced inline SVGs)
+- Anchor bounce animation class: `.anchor-loading`
 - Navigation between pages uses DOM show/hide with CSS transitions, not routing
+- Logo pill uses gradient text matching intro animation
+
+## Contact Form (temporary)
+- Formsubmit.co endpoint: pmcginty@officeliquidation.com
+- Regular form POST (not AJAX)
+- Needs initial email verification (first submit triggers it)
+- Will be replaced by Google Apps Script booking system (see memory/booking-system-plan.md)
 
 ## Deployment
 - Hosted via Cloudflare Pages, auto-deploys on git push to main branch
@@ -35,5 +45,5 @@ Everything lives in one self-contained `index.html`:
 - Always git push when work is complete
 
 ## Purpose
-Marketing site for Anchor Point Intelligence — the consulting business 
+Marketing site for Anchor Point Intelligence — the consulting business
 that builds dashboards like the nol-dashboard project for clients.
