@@ -870,7 +870,7 @@ function raiseCurtain() {
 
 // ── CONTACT MODAL ──
 const contactModal = document.getElementById('contact-modal');
-const APPS_SCRIPT_URL = ''; // TODO: Add Apps Script URL when Google Workspace is ready
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzwlZUyx5tXxrjRTgiLfKUAAeLX-I8wlD_dZBU9L1XLSclFuPqq2QN2NfzOYWdj1grjNg/exec';
 let selectedSlot = null;
 
 function openModal() {
@@ -918,13 +918,6 @@ async function fetchAvailability() {
   const picker = document.getElementById('slot-picker');
   picker.innerHTML = '<div class="slot-picker-loading"><span class="anchor-loading">⚓</span><p>Loading availability...</p></div>';
 
-  if (!APPS_SCRIPT_URL) {
-    // Placeholder slots until Apps Script is set up
-    const slots = generatePlaceholderSlots();
-    renderSlots(slots);
-    return;
-  }
-
   try {
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const res = await fetch(APPS_SCRIPT_URL + '?tz=' + encodeURIComponent(tz));
@@ -933,31 +926,6 @@ async function fetchAvailability() {
   } catch (err) {
     picker.innerHTML = '<div class="slot-picker-empty">Unable to load availability.<br>Please try again or email us directly.</div>';
   }
-}
-
-// Placeholder slots for preview (removed once Apps Script is live)
-function generatePlaceholderSlots() {
-  const slots = [];
-  const now = new Date();
-  let d = new Date(now); d.setDate(d.getDate() + 1);
-  let count = 0;
-  while (count < 5) {
-    if (d.getDay() !== 0 && d.getDay() !== 6) {
-      const day = { date: d.toISOString().slice(0,10), label: d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}), times: [] };
-      for (let h = 9; h < 17; h++) {
-        for (let m = 0; m < 60; m += 30) {
-          const start = new Date(d); start.setHours(h,m,0,0);
-          const end = new Date(start); end.setMinutes(end.getMinutes()+30);
-          const label = start.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
-          day.times.push({ start:start.toISOString(), end:end.toISOString(), label });
-        }
-      }
-      slots.push(day);
-      count++;
-    }
-    d.setDate(d.getDate()+1);
-  }
-  return slots;
 }
 
 function renderSlots(slots) {
@@ -1007,15 +975,6 @@ document.getElementById('btn-book').addEventListener('click', async () => {
     slotEnd: selectedSlot.end,
     tz: Intl.DateTimeFormat().resolvedOptions().timeZone
   };
-
-  if (!APPS_SCRIPT_URL) {
-    // No backend yet — show success preview
-    setTimeout(() => {
-      document.getElementById('phase-time').classList.remove('active');
-      document.getElementById('booking-success').style.display = 'block';
-    }, 800);
-    return;
-  }
 
   try {
     const res = await fetch(APPS_SCRIPT_URL, { method:'POST', body:JSON.stringify(payload) });
