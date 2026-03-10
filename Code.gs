@@ -24,10 +24,16 @@ var CONFIG = {
 };
 
 function doGet(e) {
-  var clientTz = (e && e.parameter && e.parameter.tz) ? e.parameter.tz : CONFIG.TIMEZONE;
-  var slots = getAvailableSlots(clientTz);
-  return ContentService.createTextOutput(JSON.stringify({ slots: slots }))
-    .setMimeType(ContentService.MimeType.JSON);
+  try {
+    var clientTz = (e && e.parameter && e.parameter.tz) ? e.parameter.tz : CONFIG.TIMEZONE;
+    var slots = getAvailableSlots(clientTz);
+    return ContentService.createTextOutput(JSON.stringify({ slots: slots }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    alertError('doGet', err, e ? JSON.stringify(e.parameter) : 'no params');
+    return ContentService.createTextOutput(JSON.stringify({ slots: [], error: 'Failed to load availability.' }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
 }
 
 function doPost(e) {
@@ -93,6 +99,9 @@ function doPost(e) {
 
     return jsonResponse({ success: true, eventId: event.getId() });
   } catch (err) {
+    var context = '';
+    try { context = e.postData.contents; } catch (x) { context = 'unable to read payload'; }
+    alertError('doPost', err, context);
     return jsonResponse({ success: false, error: 'Booking failed: ' + err.message });
   } finally {
     lock.releaseLock();
@@ -230,6 +239,24 @@ function formatInTz(date) {
 
 function padZero(n) {
   return n < 10 ? '0' + n : '' + n;
+}
+
+function alertError(source, err, context) {
+  try {
+    MailApp.sendEmail({
+      to: CONFIG.NOTIFICATION_EMAIL,
+      subject: 'BOOKING SYSTEM ERROR — ' + source,
+      body:
+        'An error occurred in the booking system.\n\n' +
+        'Function: ' + source + '\n' +
+        'Time: ' + formatInTz(new Date()) + ' (Arizona)\n' +
+        'Error: ' + err.message + '\n' +
+        'Stack: ' + (err.stack || 'N/A') + '\n\n' +
+        'Context:\n' + context
+    });
+  } catch (mailErr) {
+    Logger.log('Failed to send error alert: ' + mailErr.message);
+  }
 }
 
 function jsonResponse(obj) {
