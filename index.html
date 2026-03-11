@@ -776,8 +776,13 @@ footer {
             <animate attributeName="opacity" values="1;0;1" dur="4s" repeatCount="indefinite" begin="5s"/>
           </circle>
 
-          <!-- Life preservers tossed from anchor — staggered 2.5s apart -->
-          <!-- Buoy 1: to ERP (top-left) -->
+          <!-- Life preservers with trailing ropes — staggered 2.5s apart -->
+
+          <!-- Rope 1: to ERP -->
+          <path d="M200,158 Q110,20 60,55" fill="none" stroke="#BDD8F4" stroke-width="1" stroke-dasharray="3,2" opacity="0">
+            <animate attributeName="opacity" values="0;0.25;0.25;0;0" keyTimes="0;0.06;0.3;0.38;1" dur="6s" repeatCount="indefinite"/>
+          </path>
+          <!-- Buoy 1: to ERP -->
           <g opacity="0">
             <animateMotion dur="6s" repeatCount="indefinite" path="M200,158 Q110,20 60,55" keyPoints="0;1;1" keyTimes="0;0.35;1" calcMode="spline" keySplines="0.25 0 0.5 1;0 0 1 1"/>
             <animate attributeName="opacity" values="0;1;1;0.3;0" keyTimes="0;0.06;0.3;0.38;1" dur="6s" repeatCount="indefinite"/>
@@ -789,7 +794,11 @@ footer {
             <animate attributeName="opacity" values="0;0.5;0" keyTimes="0;0.04;0.15" dur="6s" repeatCount="indefinite" begin="2.1s"/>
           </circle>
 
-          <!-- Buoy 2: to CRM (top-center) -->
+          <!-- Rope 2: to CRM -->
+          <path d="M200,158 Q200,60 200,40" fill="none" stroke="#BDD8F4" stroke-width="1" stroke-dasharray="3,2" opacity="0">
+            <animate attributeName="opacity" values="0;0.25;0.25;0;0" keyTimes="0;0.06;0.3;0.38;1" dur="6s" repeatCount="indefinite" begin="2.5s"/>
+          </path>
+          <!-- Buoy 2: to CRM -->
           <g opacity="0">
             <animateMotion dur="6s" repeatCount="indefinite" path="M200,158 Q200,60 200,40" begin="2.5s" keyPoints="0;1;1" keyTimes="0;0.35;1" calcMode="spline" keySplines="0.25 0 0.5 1;0 0 1 1"/>
             <animate attributeName="opacity" values="0;1;1;0.3;0" keyTimes="0;0.06;0.3;0.38;1" dur="6s" repeatCount="indefinite" begin="2.5s"/>
@@ -801,7 +810,11 @@ footer {
             <animate attributeName="opacity" values="0;0.5;0" keyTimes="0;0.04;0.15" dur="6s" repeatCount="indefinite" begin="4.6s"/>
           </circle>
 
-          <!-- Buoy 3: to AP/AR (top-right) -->
+          <!-- Rope 3: to AP/AR -->
+          <path d="M200,158 Q290,20 340,55" fill="none" stroke="#BDD8F4" stroke-width="1" stroke-dasharray="3,2" opacity="0">
+            <animate attributeName="opacity" values="0;0.25;0.25;0;0" keyTimes="0;0.06;0.3;0.38;1" dur="6s" repeatCount="indefinite" begin="5s"/>
+          </path>
+          <!-- Buoy 3: to AP/AR -->
           <g opacity="0">
             <animateMotion dur="6s" repeatCount="indefinite" path="M200,158 Q290,20 340,55" begin="5s" keyPoints="0;1;1" keyTimes="0;0.35;1" calcMode="spline" keySplines="0.25 0 0.5 1;0 0 1 1"/>
             <animate attributeName="opacity" values="0;1;1;0.3;0" keyTimes="0;0.06;0.3;0.38;1" dur="6s" repeatCount="indefinite" begin="5s"/>
@@ -813,7 +826,11 @@ footer {
             <animate attributeName="opacity" values="0;0.5;0" keyTimes="0;0.04;0.15" dur="6s" repeatCount="indefinite" begin="7.1s"/>
           </circle>
 
-          <!-- Buoy 4: to Payroll (bottom-left) -->
+          <!-- Rope 4: to Payroll -->
+          <path d="M200,158 Q100,200 60,265" fill="none" stroke="#BDD8F4" stroke-width="1" stroke-dasharray="3,2" opacity="0">
+            <animate attributeName="opacity" values="0;0.25;0.25;0;0" keyTimes="0;0.06;0.3;0.38;1" dur="6s" repeatCount="indefinite" begin="7.5s"/>
+          </path>
+          <!-- Buoy 4: to Payroll -->
           <g opacity="0">
             <animateMotion dur="6s" repeatCount="indefinite" path="M200,158 Q100,200 60,265" begin="7.5s" keyPoints="0;1;1" keyTimes="0;0.35;1" calcMode="spline" keySplines="0.25 0 0.5 1;0 0 1 1"/>
             <animate attributeName="opacity" values="0;1;1;0.3;0" keyTimes="0;0.06;0.3;0.38;1" dur="6s" repeatCount="indefinite" begin="7.5s"/>
@@ -825,7 +842,11 @@ footer {
             <animate attributeName="opacity" values="0;0.5;0" keyTimes="0;0.04;0.15" dur="6s" repeatCount="indefinite" begin="9.6s"/>
           </circle>
 
-          <!-- Buoy 5: to WMS (bottom-center) -->
+          <!-- Rope 5: to WMS -->
+          <path d="M200,158 Q200,240 200,280" fill="none" stroke="#BDD8F4" stroke-width="1" stroke-dasharray="3,2" opacity="0">
+            <animate attributeName="opacity" values="0;0.25;0.25;0;0" keyTimes="0;0.06;0.3;0.38;1" dur="6s" repeatCount="indefinite" begin="10s"/>
+          </path>
+          <!-- Buoy 5: to WMS -->
           <g opacity="0">
             <animateMotion dur="6s" repeatCount="indefinite" path="M200,158 Q200,240 200,280" begin="10s" keyPoints="0;1;1" keyTimes="0;0.35;1" calcMode="spline" keySplines="0.25 0 0.5 1;0 0 1 1"/>
             <animate attributeName="opacity" values="0;1;1;0.3;0" keyTimes="0;0.06;0.3;0.38;1" dur="6s" repeatCount="indefinite" begin="10s"/>
@@ -837,7 +858,11 @@ footer {
             <animate attributeName="opacity" values="0;0.5;0" keyTimes="0;0.04;0.15" dur="6s" repeatCount="indefinite" begin="12.1s"/>
           </circle>
 
-          <!-- Buoy 6: to POS (bottom-right) -->
+          <!-- Rope 6: to POS -->
+          <path d="M200,158 Q300,200 340,265" fill="none" stroke="#BDD8F4" stroke-width="1" stroke-dasharray="3,2" opacity="0">
+            <animate attributeName="opacity" values="0;0.25;0.25;0;0" keyTimes="0;0.06;0.3;0.38;1" dur="6s" repeatCount="indefinite" begin="12.5s"/>
+          </path>
+          <!-- Buoy 6: to POS -->
           <g opacity="0">
             <animateMotion dur="6s" repeatCount="indefinite" path="M200,158 Q300,200 340,265" begin="12.5s" keyPoints="0;1;1" keyTimes="0;0.35;1" calcMode="spline" keySplines="0.25 0 0.5 1;0 0 1 1"/>
             <animate attributeName="opacity" values="0;1;1;0.3;0" keyTimes="0;0.06;0.3;0.38;1" dur="6s" repeatCount="indefinite" begin="12.5s"/>
