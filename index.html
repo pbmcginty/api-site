@@ -740,147 +740,113 @@ footer {
               <stop offset="0%" stop-color="#1A5CB0"/>
               <stop offset="100%" stop-color="#2F80D4"/>
             </linearGradient>
-            <!-- Life preserver buoy (donut with 4 alternating panels + cross straps) -->
-            <clipPath id="buoyClip">
-              <path d="M0,-14 A14,14 0 1,1 -0.01,-14 Z M0,-6 A6,6 0 1,0 -0.01,-6 Z" clip-rule="evenodd"/>
-            </clipPath>
+            <!-- Simple life preserver: white ring with 4 blue segments -->
             <g id="buoy">
-              <!-- Base ring -->
-              <circle cx="0" cy="0" r="10" fill="#BDD8F4" stroke="rgba(255,255,255,0.3)" stroke-width="0.5" clip-path="url(#buoyClip)"/>
-              <!-- Four colored quadrant panels -->
-              <rect x="-14" y="-14" width="12" height="12" fill="#2F80D4" clip-path="url(#buoyClip)"/>
-              <rect x="2" y="-14" width="12" height="12" fill="#2F80D4" clip-path="url(#buoyClip)"/>
-              <rect x="-14" y="2" width="12" height="12" fill="#2F80D4" clip-path="url(#buoyClip)"/>
-              <rect x="2" y="2" width="12" height="12" fill="#2F80D4" clip-path="url(#buoyClip)"/>
-              <!-- Cross straps (grab handles) -->
-              <rect x="-1.2" y="-13" width="2.4" height="5" rx="0.8" fill="rgba(189,216,244,0.6)"/>
-              <rect x="-1.2" y="8" width="2.4" height="5" rx="0.8" fill="rgba(189,216,244,0.6)"/>
-              <rect x="-13" y="-1.2" width="5" height="2.4" rx="0.8" fill="rgba(189,216,244,0.6)"/>
-              <rect x="8" y="-1.2" width="5" height="2.4" rx="0.8" fill="rgba(189,216,244,0.6)"/>
-              <!-- Inner hole shadow -->
-              <circle cx="0" cy="0" r="6.5" fill="none" stroke="rgba(8,20,46,0.4)" stroke-width="1.2"/>
-              <!-- Outer rim highlight -->
-              <circle cx="0" cy="0" r="13.5" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="0.5"/>
-              <!-- Rope loop at top -->
-              <path d="M-3,-14 Q-3,-19 0,-19 Q3,-19 3,-14" fill="none" stroke="#BDD8F4" stroke-width="1" opacity="0.5"/>
+              <!-- White base ring -->
+              <circle cx="0" cy="0" r="11" fill="none" stroke="#FFFFFF" stroke-width="6"/>
+              <!-- Four blue segments at 45°, 135°, 225°, 315° -->
+              <path d="M7.78,-7.78 A11,11 0 0,1 7.78,7.78" fill="none" stroke="#2F80D4" stroke-width="6"/>
+              <path d="M-7.78,7.78 A11,11 0 0,1 -7.78,-7.78" fill="none" stroke="#2F80D4" stroke-width="6"/>
             </g>
           </defs>
 
-          <!-- Water ripple rings around drowning databases -->
+          <!-- Water ripple rings around databases -->
           <circle cx="72" cy="58" r="28" fill="none" stroke="rgba(111,174,232,0.08)" stroke-width="1">
             <animate attributeName="r" values="28;38;28" dur="4s" repeatCount="indefinite"/>
             <animate attributeName="opacity" values="1;0;1" dur="4s" repeatCount="indefinite"/>
           </circle>
           <circle cx="328" cy="58" r="28" fill="none" stroke="rgba(111,174,232,0.08)" stroke-width="1">
-            <animate attributeName="r" values="28;38;28" dur="4s" repeatCount="indefinite" begin="1s"/>
-            <animate attributeName="opacity" values="1;0;1" dur="4s" repeatCount="indefinite" begin="1s"/>
+            <animate attributeName="r" values="28;38;28" dur="4s" repeatCount="indefinite" begin="1.5s"/>
+            <animate attributeName="opacity" values="1;0;1" dur="4s" repeatCount="indefinite" begin="1.5s"/>
           </circle>
           <circle cx="72" cy="258" r="28" fill="none" stroke="rgba(111,174,232,0.08)" stroke-width="1">
-            <animate attributeName="r" values="28;38;28" dur="4s" repeatCount="indefinite" begin="2s"/>
-            <animate attributeName="opacity" values="1;0;1" dur="4s" repeatCount="indefinite" begin="2s"/>
-          </circle>
-          <circle cx="328" cy="258" r="28" fill="none" stroke="rgba(111,174,232,0.08)" stroke-width="1">
             <animate attributeName="r" values="28;38;28" dur="4s" repeatCount="indefinite" begin="3s"/>
             <animate attributeName="opacity" values="1;0;1" dur="4s" repeatCount="indefinite" begin="3s"/>
           </circle>
+          <circle cx="328" cy="258" r="28" fill="none" stroke="rgba(111,174,232,0.08)" stroke-width="1">
+            <animate attributeName="r" values="28;38;28" dur="4s" repeatCount="indefinite" begin="4.5s"/>
+            <animate attributeName="opacity" values="1;0;1" dur="4s" repeatCount="indefinite" begin="4.5s"/>
+          </circle>
 
-          <!-- Rope lines from anchor to each database (draw out as buoy flies) -->
-          <line x1="200" y1="158" x2="72" y2="58" stroke="rgba(189,216,244,0.18)" stroke-width="1.2" stroke-dasharray="4,3" stroke-dashoffset="200">
-            <animate attributeName="stroke-dashoffset" values="200;0;0" keyTimes="0;0.45;1" dur="4s" repeatCount="indefinite"/>
-          </line>
-          <line x1="200" y1="158" x2="328" y2="58" stroke="rgba(189,216,244,0.18)" stroke-width="1.2" stroke-dasharray="4,3" stroke-dashoffset="200">
-            <animate attributeName="stroke-dashoffset" values="200;0;0" keyTimes="0;0.45;1" dur="4s" repeatCount="indefinite" begin="1s"/>
-          </line>
-          <line x1="200" y1="158" x2="72" y2="258" stroke="rgba(189,216,244,0.18)" stroke-width="1.2" stroke-dasharray="4,3" stroke-dashoffset="200">
-            <animate attributeName="stroke-dashoffset" values="200;0;0" keyTimes="0;0.45;1" dur="4s" repeatCount="indefinite" begin="2s"/>
-          </line>
-          <line x1="200" y1="158" x2="328" y2="258" stroke="rgba(189,216,244,0.18)" stroke-width="1.2" stroke-dasharray="4,3" stroke-dashoffset="200">
-            <animate attributeName="stroke-dashoffset" values="200;0;0" keyTimes="0;0.45;1" dur="4s" repeatCount="indefinite" begin="3s"/>
-          </line>
-
-          <!-- Animated life preservers thrown from anchor to each node -->
-          <!-- Buoy 1: to top-left (ACCTG) — high arc toss -->
+          <!-- Life preservers tossed from anchor — staggered 2.5s apart -->
+          <!-- Buoy 1: to ERP (top-left) -->
           <g opacity="0">
-            <animateMotion dur="4s" repeatCount="indefinite" path="M200,158 Q120,20 72,58" keyPoints="0;1;1" keyTimes="0;0.45;1" calcMode="spline" keySplines="0.2 0 0.6 1;0 0 1 1"/>
-            <animate attributeName="opacity" values="0;1;1;0.4;0" keyTimes="0;0.08;0.4;0.48;1" dur="4s" repeatCount="indefinite"/>
-            <animateTransform attributeName="transform" type="rotate" values="0;540" dur="1.5s" repeatCount="indefinite" additive="sum"/>
+            <animateMotion dur="6s" repeatCount="indefinite" path="M200,158 Q120,20 72,58" keyPoints="0;1;1" keyTimes="0;0.35;1" calcMode="spline" keySplines="0.25 0 0.5 1;0 0 1 1"/>
+            <animate attributeName="opacity" values="0;1;1;0.3;0" keyTimes="0;0.06;0.3;0.38;1" dur="6s" repeatCount="indefinite"/>
+            <animateTransform attributeName="transform" type="rotate" values="0;360" dur="1.8s" repeatCount="indefinite" additive="sum"/>
             <use href="#buoy"/>
           </g>
           <!-- Splash 1 -->
           <circle cx="72" cy="58" r="8" fill="none" stroke="#6BAEE8" stroke-width="1" opacity="0">
-            <animate attributeName="r" values="8;24" dur="4s" repeatCount="indefinite" begin="1.8s"/>
-            <animate attributeName="opacity" values="0;0.5;0" keyTimes="0;0.05;0.2" dur="4s" repeatCount="indefinite" begin="1.8s"/>
+            <animate attributeName="r" values="8;26" dur="6s" repeatCount="indefinite" begin="2.1s"/>
+            <animate attributeName="opacity" values="0;0.5;0" keyTimes="0;0.04;0.15" dur="6s" repeatCount="indefinite" begin="2.1s"/>
           </circle>
 
-          <!-- Buoy 2: to top-right (CRM) — high arc toss -->
+          <!-- Buoy 2: to CRM (top-right) -->
           <g opacity="0">
-            <animateMotion dur="4s" repeatCount="indefinite" path="M200,158 Q280,20 328,58" begin="1s" keyPoints="0;1;1" keyTimes="0;0.45;1" calcMode="spline" keySplines="0.2 0 0.6 1;0 0 1 1"/>
-            <animate attributeName="opacity" values="0;1;1;0.4;0" keyTimes="0;0.08;0.4;0.48;1" dur="4s" repeatCount="indefinite" begin="1s"/>
-            <animateTransform attributeName="transform" type="rotate" values="0;-540" dur="1.5s" repeatCount="indefinite" additive="sum"/>
+            <animateMotion dur="6s" repeatCount="indefinite" path="M200,158 Q280,20 328,58" begin="2.5s" keyPoints="0;1;1" keyTimes="0;0.35;1" calcMode="spline" keySplines="0.25 0 0.5 1;0 0 1 1"/>
+            <animate attributeName="opacity" values="0;1;1;0.3;0" keyTimes="0;0.06;0.3;0.38;1" dur="6s" repeatCount="indefinite" begin="2.5s"/>
+            <animateTransform attributeName="transform" type="rotate" values="0;-360" dur="1.8s" repeatCount="indefinite" additive="sum"/>
             <use href="#buoy"/>
           </g>
           <!-- Splash 2 -->
           <circle cx="328" cy="58" r="8" fill="none" stroke="#6BAEE8" stroke-width="1" opacity="0">
-            <animate attributeName="r" values="8;24" dur="4s" repeatCount="indefinite" begin="2.8s"/>
-            <animate attributeName="opacity" values="0;0.5;0" keyTimes="0;0.05;0.2" dur="4s" repeatCount="indefinite" begin="2.8s"/>
+            <animate attributeName="r" values="8;26" dur="6s" repeatCount="indefinite" begin="4.6s"/>
+            <animate attributeName="opacity" values="0;0.5;0" keyTimes="0;0.04;0.15" dur="6s" repeatCount="indefinite" begin="4.6s"/>
           </circle>
 
-          <!-- Buoy 3: to bottom-left (SHEETS) — lower arc -->
+          <!-- Buoy 3: to Accounting (bottom-left) -->
           <g opacity="0">
-            <animateMotion dur="4s" repeatCount="indefinite" path="M200,158 Q100,170 72,258" begin="2s" keyPoints="0;1;1" keyTimes="0;0.45;1" calcMode="spline" keySplines="0.2 0 0.6 1;0 0 1 1"/>
-            <animate attributeName="opacity" values="0;1;1;0.4;0" keyTimes="0;0.08;0.4;0.48;1" dur="4s" repeatCount="indefinite" begin="2s"/>
-            <animateTransform attributeName="transform" type="rotate" values="0;540" dur="1.5s" repeatCount="indefinite" additive="sum"/>
+            <animateMotion dur="6s" repeatCount="indefinite" path="M200,158 Q100,170 72,258" begin="5s" keyPoints="0;1;1" keyTimes="0;0.35;1" calcMode="spline" keySplines="0.25 0 0.5 1;0 0 1 1"/>
+            <animate attributeName="opacity" values="0;1;1;0.3;0" keyTimes="0;0.06;0.3;0.38;1" dur="6s" repeatCount="indefinite" begin="5s"/>
+            <animateTransform attributeName="transform" type="rotate" values="0;360" dur="1.8s" repeatCount="indefinite" additive="sum"/>
             <use href="#buoy"/>
           </g>
           <!-- Splash 3 -->
           <circle cx="72" cy="258" r="8" fill="none" stroke="#6BAEE8" stroke-width="1" opacity="0">
-            <animate attributeName="r" values="8;24" dur="4s" repeatCount="indefinite" begin="3.8s"/>
-            <animate attributeName="opacity" values="0;0.5;0" keyTimes="0;0.05;0.2" dur="4s" repeatCount="indefinite" begin="3.8s"/>
+            <animate attributeName="r" values="8;26" dur="6s" repeatCount="indefinite" begin="7.1s"/>
+            <animate attributeName="opacity" values="0;0.5;0" keyTimes="0;0.04;0.15" dur="6s" repeatCount="indefinite" begin="7.1s"/>
           </circle>
 
-          <!-- Buoy 4: to bottom-right (BANK) — lower arc -->
+          <!-- Buoy 4: to Banking (bottom-right) -->
           <g opacity="0">
-            <animateMotion dur="4s" repeatCount="indefinite" path="M200,158 Q300,170 328,258" begin="3s" keyPoints="0;1;1" keyTimes="0;0.45;1" calcMode="spline" keySplines="0.2 0 0.6 1;0 0 1 1"/>
-            <animate attributeName="opacity" values="0;1;1;0.4;0" keyTimes="0;0.08;0.4;0.48;1" dur="4s" repeatCount="indefinite" begin="3s"/>
-            <animateTransform attributeName="transform" type="rotate" values="0;-540" dur="1.5s" repeatCount="indefinite" additive="sum"/>
+            <animateMotion dur="6s" repeatCount="indefinite" path="M200,158 Q300,170 328,258" begin="7.5s" keyPoints="0;1;1" keyTimes="0;0.35;1" calcMode="spline" keySplines="0.25 0 0.5 1;0 0 1 1"/>
+            <animate attributeName="opacity" values="0;1;1;0.3;0" keyTimes="0;0.06;0.3;0.38;1" dur="6s" repeatCount="indefinite" begin="7.5s"/>
+            <animateTransform attributeName="transform" type="rotate" values="0;-360" dur="1.8s" repeatCount="indefinite" additive="sum"/>
             <use href="#buoy"/>
           </g>
           <!-- Splash 4 -->
           <circle cx="328" cy="258" r="8" fill="none" stroke="#6BAEE8" stroke-width="1" opacity="0">
-            <animate attributeName="r" values="8;24" dur="4s" repeatCount="indefinite" begin="4.8s"/>
-            <animate attributeName="opacity" values="0;0.5;0" keyTimes="0;0.05;0.2" dur="4s" repeatCount="indefinite" begin="4.8s"/>
+            <animate attributeName="r" values="8;26" dur="6s" repeatCount="indefinite" begin="9.6s"/>
+            <animate attributeName="opacity" values="0;0.5;0" keyTimes="0;0.04;0.15" dur="6s" repeatCount="indefinite" begin="9.6s"/>
           </circle>
 
-          <!-- Database nodes (slightly bobbing like they're in water) -->
+          <!-- Database nodes (bobbing in water) -->
           <g>
             <animateTransform attributeName="transform" type="translate" values="0,0;0,-3;0,0;0,2;0,0" dur="3s" repeatCount="indefinite"/>
             <rect x="36" y="34" width="72" height="48" rx="8" fill="rgba(15,48,104,0.85)" stroke="rgba(111,174,232,0.2)"/>
-            <text x="72" y="55" text-anchor="middle" fill="#BDD8F4" font-family="Montserrat" font-size="8" letter-spacing="1" font-weight="600">ACCTG</text>
-            <text x="72" y="68" text-anchor="middle" fill="#6BAEE8" font-family="Montserrat" font-size="6" letter-spacing="0.5" opacity="0.5">ERP</text>
+            <text x="72" y="56" text-anchor="middle" fill="#BDD8F4" font-family="Montserrat" font-size="9" letter-spacing="1" font-weight="600">ERP</text>
           </g>
 
           <g>
             <animateTransform attributeName="transform" type="translate" values="0,0;0,2;0,0;0,-3;0,0" dur="3.4s" repeatCount="indefinite"/>
             <rect x="292" y="34" width="72" height="48" rx="8" fill="rgba(15,48,104,0.85)" stroke="rgba(111,174,232,0.2)"/>
-            <text x="328" y="55" text-anchor="middle" fill="#BDD8F4" font-family="Montserrat" font-size="8" letter-spacing="1" font-weight="600">CRM</text>
-            <text x="328" y="68" text-anchor="middle" fill="#6BAEE8" font-family="Montserrat" font-size="6" letter-spacing="0.5" opacity="0.5">PIPELINE</text>
+            <text x="328" y="56" text-anchor="middle" fill="#BDD8F4" font-family="Montserrat" font-size="9" letter-spacing="1" font-weight="600">CRM</text>
           </g>
 
           <g>
             <animateTransform attributeName="transform" type="translate" values="0,0;0,2;0,0;0,-3;0,0" dur="2.8s" repeatCount="indefinite"/>
-            <rect x="36" y="234" width="72" height="48" rx="8" fill="rgba(15,48,104,0.85)" stroke="rgba(111,174,232,0.2)"/>
-            <text x="72" y="255" text-anchor="middle" fill="#BDD8F4" font-family="Montserrat" font-size="8" letter-spacing="1" font-weight="600">SHEETS</text>
-            <text x="72" y="268" text-anchor="middle" fill="#6BAEE8" font-family="Montserrat" font-size="6" letter-spacing="0.5" opacity="0.5">DATA LAYER</text>
+            <rect x="24" y="234" width="96" height="48" rx="8" fill="rgba(15,48,104,0.85)" stroke="rgba(111,174,232,0.2)"/>
+            <text x="72" y="263" text-anchor="middle" fill="#BDD8F4" font-family="Montserrat" font-size="7.5" letter-spacing="1" font-weight="600">ACCOUNTING</text>
           </g>
 
           <g>
             <animateTransform attributeName="transform" type="translate" values="0,0;0,-2;0,0;0,3;0,0" dur="3.2s" repeatCount="indefinite"/>
-            <rect x="292" y="234" width="72" height="48" rx="8" fill="rgba(15,48,104,0.85)" stroke="rgba(111,174,232,0.2)"/>
-            <text x="328" y="255" text-anchor="middle" fill="#BDD8F4" font-family="Montserrat" font-size="8" letter-spacing="1" font-weight="600">BANK</text>
-            <text x="328" y="268" text-anchor="middle" fill="#6BAEE8" font-family="Montserrat" font-size="6" letter-spacing="0.5" opacity="0.5">CASH FLOW</text>
+            <rect x="286" y="234" width="84" height="48" rx="8" fill="rgba(15,48,104,0.85)" stroke="rgba(111,174,232,0.2)"/>
+            <text x="328" y="263" text-anchor="middle" fill="#BDD8F4" font-family="Montserrat" font-size="8" letter-spacing="1" font-weight="600">BANKING</text>
           </g>
 
-          <!-- Center anchor hub (the rescuer) -->
+          <!-- Center anchor hub -->
           <circle cx="200" cy="158" r="36" fill="url(#hubGrad)" stroke="rgba(111,174,232,0.35)" stroke-width="1.5"/>
           <circle cx="200" cy="158" r="42" fill="none" stroke="rgba(111,174,232,0.08)" stroke-width="1">
             <animate attributeName="r" values="42;52;42" dur="3s" repeatCount="indefinite"/>
