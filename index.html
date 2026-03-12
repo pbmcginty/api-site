@@ -65,9 +65,9 @@ html, body {
   display:inline-block; width:0.6em; height:1.6em;
   background:var(--sky); margin-left:4px; vertical-align:middle;
   opacity:0.7; border-radius:2px;
-  animation: blink 0.8s step-end infinite;
+  animation: blink 1s ease-in-out infinite;
 }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+@keyframes blink { 0%,100%{opacity:0.8} 50%{opacity:0.15} }
 
 /* LOGO */
 #logo {
@@ -577,7 +577,7 @@ footer {
       <div class="sp-pt"><div class="sp-pn">02</div><div class="sp-pt-t">Gap Analysis</div><p class="sp-pt-d">Bottlenecks, redundancies, and missing connections identified.</p></div>
       <div class="sp-pt"><div class="sp-pn">03</div><div class="sp-pt-t">Infrastructure Roadmap</div><p class="sp-pt-d">A prioritized plan to clean, connect, and future-proof your stack.</p></div>
     </div>
-    <a href="#" class="btn-p">Book a Discovery Call</a>
+    <a href="#" class="btn-p" onclick="openModal();return false">Book a Discovery Call</a>
   </div>
 </div>
 
@@ -596,7 +596,7 @@ footer {
       <div class="sp-pt"><div class="sp-pn">02</div><div class="sp-pt-t">Data Normalization</div><p class="sp-pt-d">Consistent formats, schemas, and naming across all sources.</p></div>
       <div class="sp-pt"><div class="sp-pn">03</div><div class="sp-pt-t">Real-Time Sync</div><p class="sp-pt-d">Live data pipelines so your information is always current.</p></div>
     </div>
-    <a href="#" class="btn-p">Book a Discovery Call</a>
+    <a href="#" class="btn-p" onclick="openModal();return false">Book a Discovery Call</a>
   </div>
 </div>
 
@@ -615,7 +615,7 @@ footer {
       <div class="sp-pt"><div class="sp-pn">02</div><div class="sp-pt-t">Live Data</div><p class="sp-pt-d">Pulls from all connected systems in real time.</p></div>
       <div class="sp-pt"><div class="sp-pn">03</div><div class="sp-pt-t">Role-Based Views</div><p class="sp-pt-d">The right data for each person, nothing more.</p></div>
     </div>
-    <a href="#" class="btn-p">Book a Discovery Call</a>
+    <a href="#" class="btn-p" onclick="openModal();return false">Book a Discovery Call</a>
   </div>
 </div>
 
@@ -634,7 +634,7 @@ footer {
       <div class="sp-pt"><div class="sp-pn">02</div><div class="sp-pt-t">Ongoing Development</div><p class="sp-pt-d">New features, integrations, and improvements each month.</p></div>
       <div class="sp-pt"><div class="sp-pn">03</div><div class="sp-pt-t">Quarterly Reviews</div><p class="sp-pt-d">Strategic infrastructure reviews aligned to your business goals.</p></div>
     </div>
-    <a href="#" class="btn-p">Book a Discovery Call</a>
+    <a href="#" class="btn-p" onclick="openModal();return false">Book a Discovery Call</a>
   </div>
 </div>
 
@@ -989,7 +989,7 @@ footer {
     <p class="sec-label">Get Started</p>
     <h2 class="cta-title">Your data already knows the answer.</h2>
     <p class="cta-sub">Book a free 30-minute strategy call. We will identify your biggest data gap in the first conversation.</p>
-    <a href="#" class="btn-p">Book a Discovery Call</a>
+    <a href="#" class="btn-p" onclick="openModal();return false">Book a Discovery Call</a>
   </div>
 
   <!-- FOOTER -->
@@ -1080,22 +1080,50 @@ function typeOn() {
     twText.textContent = FULL.slice(0, ++idx);
     setTimeout(typeOn, 60 + Math.random() * 38);
   } else {
-    setTimeout(typeOff, 420);
+    setTimeout(collapse, 800);
   }
 }
 
-function typeOff() {
-  if (twText.textContent.length > 0) {
-    twText.textContent = twText.textContent.slice(0, -1);
-    setTimeout(typeOff, 10 + Math.random() * 8);
-  } else {
-    twText.textContent = SHORT;
-    setTimeout(flyAway, 200);
-  }
+function collapse() {
+  // Wrap each letter in a span, marking initials (a, p, i) vs the rest
+  var words = FULL.split(' ');
+  var html = '';
+  words.forEach(function(word, wi) {
+    if (wi > 0) html += '<span class="tw-fade" style="display:inline-block;transition:opacity 0.5s ease,max-width 0.5s ease,margin 0.5s ease;opacity:1;max-width:0.4em;overflow:hidden;vertical-align:top"> </span>';
+    for (var ci = 0; ci < word.length; ci++) {
+      if (ci === 0) {
+        html += '<span class="tw-initial" style="display:inline-block;transition:transform 0.6s cubic-bezier(0.45,0,0.15,1),letter-spacing 0.6s cubic-bezier(0.45,0,0.15,1)">' + word[ci] + '</span>';
+      } else {
+        html += '<span class="tw-fade" style="display:inline-block;transition:opacity 0.5s ease,max-width 0.5s ease,margin 0.5s ease;opacity:1;max-width:0.6em;overflow:hidden;vertical-align:top">' + word[ci] + '</span>';
+      }
+    }
+  });
+  twText.innerHTML = html;
+  twText.offsetWidth; // reflow
+
+  // Phase 1: fade out non-initial letters
+  var faders = twText.querySelectorAll('.tw-fade');
+  faders.forEach(function(el) {
+    el.style.opacity = '0';
+    el.style.maxWidth = '0';
+    el.style.margin = '0';
+  });
+
+  // Phase 2: after fade, tighten the initials together
+  setTimeout(function() {
+    twCursor.style.transition = 'opacity 0.3s ease';
+    twCursor.style.opacity = '0';
+    // Remove faded elements, leave just initials
+    faders.forEach(function(el) { el.remove(); });
+    twText.offsetWidth;
+    setTimeout(flyAway, 300);
+  }, 600);
 }
 
 function flyAway() {
   twCursor.style.display = 'none';
+  // Replace span markup with plain text for clean morph
+  twText.textContent = SHORT;
   const wrap = document.getElementById('tw-wrap');
   const textEl = twText;
 
@@ -1396,10 +1424,6 @@ document.querySelectorAll('.btn-g').forEach(btn => {
 });
 </script>
 
-<!-- Cloudflare Web Analytics -->
-<!-- To activate: go to Cloudflare dashboard → your site → Web Analytics → Enable.
-     Copy the beacon token and replace TOKEN_HERE below. -->
-<!-- <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "TOKEN_HERE"}'></script> -->
 
 </body>
 </html>
