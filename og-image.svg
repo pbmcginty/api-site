@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#08142E"/>
+
+  <!-- Subtle grid -->
+  <defs>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(111,174,232,0.04)" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="orb1" cx="75%" cy="25%" r="40%">
+      <stop offset="0%" stop-color="rgba(47,128,212,0.15)"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <radialGradient id="orb2" cx="25%" cy="75%" r="35%">
+      <stop offset="0%" stop-color="rgba(15,48,104,0.3)"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6BAEE8"/>
+      <stop offset="50%" stop-color="#FAF8F5"/>
+      <stop offset="100%" stop-color="#BDD8F4"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#orb1)"/>
+  <rect width="1200" height="630" fill="url(#orb2)"/>
+
+  <!-- Anchor -->
+  <text x="600" y="270" text-anchor="middle" font-size="120" fill="#FFFFFF">⚓</text>
+
+  <!-- Text: Anchor Point Intelligence -->
+  <text x="600" y="390" text-anchor="middle" font-family="'Montserrat', 'Helvetica Neue', Arial, sans-serif" font-size="36" font-weight="200" letter-spacing="8" fill="url(#textGrad)">
+    <tspan font-weight="400">A</tspan>nchor <tspan font-weight="400">P</tspan>oint <tspan font-weight="400">I</tspan>ntelligence
+  </text>
+
+  <!-- Subtle line -->
+  <line x1="400" y1="430" x2="800" y2="430" stroke="rgba(111,174,232,0.2)" stroke-width="1"/>
+
+  <!-- Tagline -->
+  <text x="600" y="470" text-anchor="middle" font-family="'Montserrat', 'Helvetica Neue', Arial, sans-serif" font-size="16" font-weight="400" letter-spacing="4" fill="#6BAEE8" opacity="0.7">
+    DATA INFRASTRUCTURE CONSULTING
+  </text>
+</svg>
