@@ -119,7 +119,7 @@ nav .cta:hover { transform:translateY(-1px); box-shadow:0 8px 28px rgba(47,128,2
   position:fixed; inset:0; z-index:100;
   overflow-y:auto; background:var(--navy);
   transform:translateY(0);
-  transition:transform 0.85s cubic-bezier(0.7,0,0.3,1);
+  will-change:transform,filter;
 }
 #home-curtain.pull-down { transform:translateY(100vh); }
 
@@ -561,6 +561,14 @@ footer {
 </style>
 </head>
 <body>
+
+<!-- Cloth warp filter -->
+<svg style="position:absolute;width:0;height:0">
+  <filter id="cloth-warp">
+    <feTurbulence id="cloth-turb" type="fractalNoise" baseFrequency="0" numOctaves="3" seed="2" result="noise"/>
+    <feDisplacementMap id="cloth-disp" in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
 
 <!-- INTRO -->
 <div id="intro">
@@ -1201,7 +1209,91 @@ const flyEl    = document.getElementById('fly-anchor');
 let activePage = null;
 let savedScroll = 0;
 
+// Cloth warp filter elements
+const clothTurb = document.getElementById('cloth-turb');
+const clothDisp = document.getElementById('cloth-disp');
+let clothAnim = null;
+
+function animateClothPull(onDone) {
+  const dur = 1200; // total ms
+  const start = performance.now();
+  curtain.style.filter = 'url(#cloth-warp)';
+
+  function tick(now) {
+    const t = Math.min((now - start) / dur, 1);
+    // Ease: slow start, fast end (like cloth catching air then whipping off)
+    const ease = t < 0.3 ? t / 0.3 * 0.4 : 0.4 + (t - 0.3) / 0.7 * 0.6;
+
+    // Turbulence ramps up then holds — gives the ripple
+    const turbPeak = 0.012;
+    const turbT = t < 0.5 ? t / 0.5 : 1 - (t - 0.5) / 0.5 * 0.3;
+    clothTurb.setAttribute('baseFrequency', (turbT * turbPeak).toFixed(5) + ' ' + (turbT * turbPeak * 0.6).toFixed(5));
+
+    // Displacement: ramps up dramatically, peaks mid-animation
+    const dispPeak = 120;
+    const dispCurve = Math.sin(t * Math.PI);
+    clothDisp.setAttribute('scale', (dispCurve * dispPeak).toFixed(1));
+
+    // Translate down with organic wobble
+    const wobble = Math.sin(t * Math.PI * 4) * (1 - t) * 15;
+    const pullY = ease * (window.innerHeight + 60) + wobble;
+    curtain.style.transform = 'translateY(' + pullY + 'px)';
+
+    if (t < 1) {
+      clothAnim = requestAnimationFrame(tick);
+    } else {
+      curtain.style.filter = '';
+      curtain.style.transform = 'translateY(100vh)';
+      curtain.classList.add('pull-down');
+      clothTurb.setAttribute('baseFrequency', '0');
+      clothDisp.setAttribute('scale', '0');
+      clothAnim = null;
+      if (onDone) onDone();
+    }
+  }
+  clothAnim = requestAnimationFrame(tick);
+}
+
+function animateClothReturn(onDone) {
+  const dur = 900;
+  const start = performance.now();
+  curtain.classList.remove('pull-down');
+  curtain.style.filter = 'url(#cloth-warp)';
+
+  function tick(now) {
+    const t = Math.min((now - start) / dur, 1);
+    const ease = 1 - Math.pow(1 - t, 3); // ease-out cubic
+
+    // Light turbulence on return, settling down
+    const turbAmount = (1 - ease) * 0.008;
+    clothTurb.setAttribute('baseFrequency', turbAmount.toFixed(5) + ' ' + (turbAmount * 0.6).toFixed(5));
+
+    const dispAmount = (1 - ease) * 60;
+    clothDisp.setAttribute('scale', dispAmount.toFixed(1));
+
+    const wobble = Math.sin(t * Math.PI * 3) * (1 - t) * 10;
+    const pullY = (1 - ease) * window.innerHeight + wobble;
+    curtain.style.transform = 'translateY(' + pullY + 'px)';
+    curtain.scrollTop = savedScroll;
+
+    if (t < 1) {
+      clothAnim = requestAnimationFrame(tick);
+    } else {
+      curtain.style.filter = '';
+      curtain.style.transform = 'translateY(0)';
+      clothTurb.setAttribute('baseFrequency', '0');
+      clothDisp.setAttribute('scale', '0');
+      clothAnim = null;
+      if (onDone) onDone();
+    }
+  }
+  clothAnim = requestAnimationFrame(tick);
+}
+
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 function pullCurtain(id, card) {
+  if (clothAnim) return;
   if (activePage) activePage.classList.remove('active');
   activePage = document.getElementById('svc-' + id);
   activePage.classList.add('active');
@@ -1232,25 +1324,33 @@ function pullCurtain(id, card) {
     flyEl.style.opacity = '0';
 
     savedScroll = curtain.scrollTop;
-    setTimeout(() => curtain.classList.add('pull-down'), 100);
-
-    // Restore card icon after curtain is down
-    setTimeout(() => { icon.style.visibility = ''; }, 900);
+    if (reducedMotion) {
+      curtain.style.transform = 'translateY(100vh)';
+      curtain.classList.add('pull-down');
+      icon.style.visibility = '';
+    } else {
+      setTimeout(() => animateClothPull(() => {
+        icon.style.visibility = '';
+      }), 100);
+    }
   }, 500);
 }
 
 function raiseCurtain() {
-  // Restore scroll before the transition starts
+  if (clothAnim) return;
   curtain.scrollTop = savedScroll;
   void curtain.offsetWidth;
-  curtain.classList.remove('pull-down');
-  // Also keep restoring during transition in case browser resets it
-  const restoreInterval = setInterval(() => { curtain.scrollTop = savedScroll; }, 16);
-  setTimeout(() => {
-    clearInterval(restoreInterval);
+  if (reducedMotion) {
+    curtain.style.transform = 'translateY(0)';
+    curtain.classList.remove('pull-down');
     curtain.scrollTop = savedScroll;
     if (activePage) { activePage.classList.remove('active'); activePage = null; }
-  }, 900);
+  } else {
+    animateClothReturn(() => {
+      curtain.scrollTop = savedScroll;
+      if (activePage) { activePage.classList.remove('active'); activePage = null; }
+    });
+  }
 }
 
 // ── CONTACT MODAL ──
