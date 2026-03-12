@@ -538,6 +538,26 @@ footer {
   .sp { padding:100px 24px 60px; }
 }
 @media (max-width:400px) { .steps { grid-template-columns:1fr; } }
+
+/* FOCUS */
+:focus-visible {
+  outline:2px solid var(--sky);
+  outline-offset:2px;
+}
+.svc-card:focus-visible { outline-offset:-2px; }
+.slot-btn:focus-visible { outline-offset:1px; }
+
+/* REDUCED MOTION */
+@media (prefers-reduced-motion:reduce) {
+  *, *::before, *::after {
+    animation-duration:0.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:0.01ms !important;
+  }
+  .integ-lines animate,
+  .integ-lines animateMotion,
+  .integ-lines animateTransform { display:none; }
+}
 </style>
 </head>
 <body>
@@ -670,28 +690,28 @@ footer {
     <h2 class="sec-title">Infrastructure that thinks with you</h2>
     <div class="svc-grid">
 
-      <div class="svc-card" onclick="pullCurtain('audit',this)">
+      <div class="svc-card" tabindex="0" role="button" onclick="pullCurtain('audit',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();pullCurtain('audit',this)}">
         <span class="a-icon">⚓</span>
         <div class="svc-name">Database Architecture Audit</div>
         <p class="svc-desc">We map every data source in your organization, identify bottlenecks, redundancies, and missing links, then build the blueprint to fix them.</p>
         <span class="svc-tag">Entry Engagement</span>
       </div>
 
-      <div class="svc-card" onclick="pullCurtain('integration',this)">
+      <div class="svc-card" tabindex="0" role="button" onclick="pullCurtain('integration',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();pullCurtain('integration',this)}">
         <span class="a-icon">⚓</span>
         <div class="svc-name">Systems Integration</div>
         <p class="svc-desc">CRM, ERP, custom databases, spreadsheets: we connect your entire ecosystem through a clean, unified data layer your team can actually trust.</p>
         <span class="svc-tag">Core Service</span>
       </div>
 
-      <div class="svc-card" onclick="pullCurtain('dashboard',this)">
+      <div class="svc-card" tabindex="0" role="button" onclick="pullCurtain('dashboard',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();pullCurtain('dashboard',this)}">
         <span class="a-icon">⚓</span>
         <div class="svc-name">Custom Intelligence Dashboard</div>
         <p class="svc-desc">A single high-level command center that pulls live data from all systems. Built for your KPIs, your workflows, your team, not off-the-shelf compromises.</p>
         <span class="svc-tag">Signature Deliverable</span>
       </div>
 
-      <div class="svc-card" onclick="pullCurtain('retainer',this)">
+      <div class="svc-card" tabindex="0" role="button" onclick="pullCurtain('retainer',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();pullCurtain('retainer',this)}">
         <span class="a-icon">⚓</span>
         <div class="svc-name">Ongoing Infrastructure Retainer</div>
         <p class="svc-desc">Your on-call data engineering team: monitoring, optimization, new integrations, and quarterly system health reviews. All without the overhead of a full hire.</p>
@@ -989,11 +1009,11 @@ footer {
 </div><!-- /home-curtain -->
 
 <!-- CONTACT MODAL -->
-<div id="contact-modal" onclick="if(event.target===this)closeModal()">
+<div id="contact-modal" role="dialog" aria-modal="true" aria-labelledby="modal-heading" onclick="if(event.target===this)closeModal()">
   <div class="modal-box">
-    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
     <p class="modal-label">Get Started</p>
-    <h3 class="modal-title">Book a Discovery Call</h3>
+    <h3 class="modal-title" id="modal-heading">Book a Discovery Call</h3>
 
     <!-- PHASE 1: Contact Info -->
     <div class="form-phase active" id="phase-info">
@@ -1299,27 +1319,36 @@ function renderSlots(slots) {
     picker.innerHTML = '<div class="slot-picker-empty">No availability in the next two weeks.<br>Please email us directly.</div>';
     return;
   }
-  let html = '<div class="slot-columns">';
+  picker.innerHTML = '';
+  const wrap = document.createElement('div');
+  wrap.className = 'slot-columns';
   slots.forEach(day => {
-    html += '<div class="slot-date-col"><div class="slot-date-header">' + day.label + '</div>';
+    const col = document.createElement('div');
+    col.className = 'slot-date-col';
+    const header = document.createElement('div');
+    header.className = 'slot-date-header';
+    header.textContent = day.label;
+    col.appendChild(header);
     day.times.forEach(t => {
-      html += '<button class="slot-btn" data-start="' + t.start + '" data-end="' + t.end + '" data-label="' + day.label + ' at ' + t.label + '">' + t.label + '</button>';
+      const btn = document.createElement('button');
+      btn.className = 'slot-btn';
+      btn.dataset.start = t.start;
+      btn.dataset.end = t.end;
+      btn.dataset.label = day.label + ' at ' + t.label;
+      btn.textContent = t.label;
+      btn.addEventListener('click', () => {
+        picker.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedSlot = { start: t.start, end: t.end };
+        document.getElementById('selected-slot-display').textContent = btn.dataset.label;
+        document.getElementById('selected-slot-display').style.display = 'block';
+        document.getElementById('btn-book').disabled = false;
+      });
+      col.appendChild(btn);
     });
-    html += '</div>';
+    wrap.appendChild(col);
   });
-  html += '</div>';
-  picker.innerHTML = html;
-
-  picker.querySelectorAll('.slot-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      picker.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-      selectedSlot = { start:btn.dataset.start, end:btn.dataset.end };
-      document.getElementById('selected-slot-display').textContent = btn.dataset.label;
-      document.getElementById('selected-slot-display').style.display = 'block';
-      document.getElementById('btn-book').disabled = false;
-    });
-  });
+  picker.appendChild(wrap);
 }
 
 // Book the slot
@@ -1342,7 +1371,7 @@ document.getElementById('btn-book').addEventListener('click', async () => {
   };
 
   try {
-    const res = await fetch(APPS_SCRIPT_URL, { method:'POST', body:JSON.stringify(payload) });
+    const res = await fetch(APPS_SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
     const data = await res.json();
     if (data.success) {
       document.getElementById('phase-time').classList.remove('active');
