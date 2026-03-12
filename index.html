@@ -1133,7 +1133,7 @@ function flyAway() {
 
   // Set starting state for pill morph — keep gradient text
   textEl.style.fontSize = 'clamp(1.4rem,4vw,2.8rem)';
-  textEl.style.fontWeight = '400';
+  textEl.style.fontWeight = '200';
   textEl.style.letterSpacing = '0.1em';
   textEl.style.padding = '0';
   textEl.style.border = '1px solid transparent';
@@ -1145,12 +1145,13 @@ function flyAway() {
   const dur = '0.75s';
   const ease = 'cubic-bezier(0.45,0,0.15,1)';
   wrap.style.transition = `left ${dur} ${ease}, top ${dur} ${ease}`;
-  textEl.style.transition = `font-size ${dur} ${ease}, letter-spacing ${dur} ${ease}, padding ${dur} ${ease}, border-color ${dur} ${ease}`;
+  textEl.style.transition = `font-size ${dur} ${ease}, font-weight ${dur} ${ease}, letter-spacing ${dur} ${ease}, padding ${dur} ${ease}, border-color ${dur} ${ease}`;
 
   wrap.style.left = tx + 'px';
   wrap.style.top  = ty + 'px';
 
   textEl.style.fontSize = '0.8rem';
+  textEl.style.fontWeight = '400';
   textEl.style.letterSpacing = '0.22em';
   textEl.style.padding = '5px 12px';
   textEl.style.borderColor = 'rgba(111,174,232,0.35)';
