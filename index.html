@@ -162,6 +162,7 @@ nav .cta:hover { transform:translateY(-1px); box-shadow:0 8px 28px rgba(47,128,2
 .eyebrow::before,.eyebrow::after { content:''; flex:1; max-width:60px; height:1px; }
 .eyebrow::before { background:linear-gradient(90deg,transparent,var(--sky)); }
 .eyebrow::after  { background:linear-gradient(90deg,var(--sky),transparent); }
+.eyebrow .mbr { display:none; }
 h1 {
   font-weight:100; font-size:clamp(2.8rem,6vw,5.2rem); line-height:1.12; margin-bottom:30px;
   background:linear-gradient(160deg,var(--white) 0%,var(--mist) 50%,var(--sky) 100%);
@@ -317,29 +318,6 @@ h1 {
   padding:4px 10px; border-radius:3px; opacity:0.7;
 }
 
-/* INTEGRATION ANIMATION */
-.integ-anim { position:relative; width:100%; height:100%; min-height:280px; }
-.integ-node {
-  position:absolute; width:64px; height:64px; border-radius:14px;
-  display:flex; align-items:center; justify-content:center;
-  font-size:0.5rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase;
-  color:var(--white); text-align:center; line-height:1.3;
-  border:1px solid rgba(111,174,232,0.25);
-  box-shadow:0 0 24px rgba(47,128,212,0.15);
-}
-.integ-node.src { background:linear-gradient(135deg, var(--sapphire), rgba(15,48,104,0.8)); }
-.integ-node.hub {
-  width:80px; height:80px; border-radius:18px;
-  background:linear-gradient(135deg, var(--aegean), var(--cerulean));
-  font-size:1.4rem; border-color:rgba(111,174,232,0.4);
-  box-shadow:0 0 40px rgba(47,128,212,0.3);
-}
-.integ-node.n1 { top:12%; left:8%; }
-.integ-node.n2 { top:12%; right:8%; }
-.integ-node.n3 { bottom:12%; left:8%; }
-.integ-node.n4 { bottom:12%; right:8%; }
-.integ-node.center { top:50%; left:50%; transform:translate(-50%,-50%); }
-
 /* Integration animation SVG */
 .integ-lines { position:absolute; inset:0; }
 
@@ -347,7 +325,7 @@ h1 {
   .cs-card { grid-template-columns:1fr; }
   .cs-visual { min-height:260px; }
   .cs-content { padding:36px 24px; }
-  .cs-stats { grid-template-columns:1fr; }
+  .cs-stats { grid-template-columns:repeat(3,1fr); }
   .cs-wrap { padding:64px 24px; }
 }
 
@@ -537,6 +515,10 @@ footer {
   nav { padding:18px 20px 18px 90px; }
   nav a:not(.cta) { display:none; }
   .hero { padding:70px 24px 60px; }
+  .eyebrow { display:block; text-align:center; }
+  .eyebrow::before,.eyebrow::after { display:none; }
+  .eyebrow .dot { display:none; }
+  .eyebrow .mbr { display:block; height:12px; }
   .actions { flex-direction:column; align-items:center; }
   .btn-p,.btn-g { width:100%; max-width:300px; text-align:center; }
   .metrics { grid-template-columns:1fr; }
@@ -659,7 +641,7 @@ footer {
     <div class="orb1"></div>
     <div class="orb2"></div>
     <div class="hero-inner">
-      <p class="eyebrow">Data Infrastructure · Intelligence Systems</p>
+      <p class="eyebrow">Data Infrastructure<span class="dot"> · </span><span class="mbr">·</span>Intelligence Systems</p>
       <h1>One view.<br>Every system.<br>Total clarity.</h1>
       <p class="hero-sub">We architect the data layer your business runs on, connecting every platform, database, and tool into a single intelligent command center.</p>
       <div class="actions">
