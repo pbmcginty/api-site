@@ -14,11 +14,12 @@ No build, lint, or test commands. To preview, open `index.html` in a browser.
 
 ## Architecture
 
-Everything lives in one self-contained `index.html` (~1406 lines):
+Everything lives in one self-contained `index.html` (~1516 lines):
 
-- **CSS** (lines 30–530): All styles in a `<style>` block. CSS custom properties in `:root` for brand palette (navy/sapphire/aegean/cerulean/sky/mist/villa/white). Responsive breakpoints at 1024px (logo name hides), 768px (nav links hide, mobile layout), and 400px (single-column steps). Includes case study card styles.
-- **HTML** (lines 532–1043): Typewriter intro overlay, four service detail pages (`svc-audit`, `svc-integration`, `svc-dashboard`, `svc-retainer`), home curtain (hero, metrics, service cards, process steps, case study section with animated SVG integration visual, CTA, footer), contact modal form, and flying anchor element.
-- **JavaScript** (lines 1045–1402): Four systems:
+- **JSON-LD** (lines 32–95): Organization + Service structured data for Google rich results.
+- **CSS** (lines 97–594): All styles in a `<style>` block. CSS custom properties in `:root` for brand palette (navy/sapphire/aegean/cerulean/sky/mist/villa/white). Responsive breakpoints at 1024px (logo name hides), 768px (nav links hide, mobile layout), and 400px (single-column steps). Includes case study card styles.
+- **HTML** (lines 596–1107): Typewriter intro overlay, four service detail pages (`svc-audit`, `svc-integration`, `svc-dashboard`, `svc-retainer`), home curtain (hero, metrics, service cards, process steps, case study section with animated SVG integration visual, CTA, footer), contact modal form, and flying anchor element.
+- **JavaScript** (lines 1109–1516): Four systems:
   - **Typewriter intro**: Types "anchor point intelligence" (lowercase), erases to "api", morphs with gradient into logo pill position.
   - **Curtain navigation**: `pullCurtain(id, card)` — anchor wiggles then flies down, curtain slides to reveal service page. `raiseCurtain()` — restores scroll position.
   - **Booking modal**: `openModal()`/`closeModal()` — two-phase booking form (contact info → availability picker) via Google Apps Script backend.
