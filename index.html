@@ -28,6 +28,7 @@
 <!-- SEO Meta -->
 <meta name="description" content="Anchor Point Intelligence — data infrastructure consulting. We audit, integrate, and visualize your data with custom dashboards and ongoing support.">
 <meta name="robots" content="index, follow">
+<link rel="canonical" href="https://anchorpointintelligence.com/">
 
 <!-- JSON-LD Structured Data -->
 <script type="application/ld+json">
@@ -95,6 +96,7 @@
 </script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -1378,14 +1380,14 @@ async function fetchAvailability() {
     const data = await res.json();
     renderSlots(data.slots);
   } catch (err) {
-    picker.innerHTML = '<div class="slot-picker-empty">Unable to load availability.<br>Please try again or email us directly.</div>';
+    picker.innerHTML = '<div class="slot-picker-empty">Unable to load availability.<br>Please try again or <a href="mailto:patrick@anchorpointintelligence.com?subject=Discovery%20Call%20Request" style="color:var(--sky);text-decoration:underline">email us directly</a>.</div>';
   }
 }
 
 function renderSlots(slots) {
   const picker = document.getElementById('slot-picker');
   if (!slots || slots.length === 0) {
-    picker.innerHTML = '<div class="slot-picker-empty">No availability in the next two weeks.<br>Please email us directly.</div>';
+    picker.innerHTML = '<div class="slot-picker-empty">No availability in the next two weeks.<br>Please <a href="mailto:patrick@anchorpointintelligence.com?subject=Discovery%20Call%20Request" style="color:var(--sky);text-decoration:underline">email us directly</a>.</div>';
     return;
   }
   picker.innerHTML = '';
@@ -1455,7 +1457,7 @@ document.getElementById('btn-book').addEventListener('click', async () => {
   } catch (err) {
     btn.innerHTML = 'Confirm Booking';
     btn.disabled = false;
-    alert('Something went wrong. Please try again.');
+    alert('Something went wrong. Please try again, or email patrick@anchorpointintelligence.com directly.');
   }
 });
 

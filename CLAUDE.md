@@ -14,7 +14,7 @@ No build, lint, or test commands. To preview, open `index.html` in a browser.
 
 ## Architecture
 
-Everything lives in one self-contained `index.html` (~1516 lines):
+Everything lives in one self-contained `index.html` (~1518 lines):
 
 - **JSON-LD** (lines 32–95): Organization + Service structured data for Google rich results.
 - **CSS** (lines 97–594): All styles in a `<style>` block. CSS custom properties in `:root` for brand palette (navy/sapphire/aegean/cerulean/sky/mist/villa/white). Responsive breakpoints at 1024px (logo name hides), 768px (nav links hide, mobile layout), and 400px (single-column steps). Includes case study card styles.
@@ -54,6 +54,12 @@ Everything lives in one self-contained `index.html` (~1516 lines):
 ## Security Headers
 - `_headers` file for Cloudflare Pages with CSP, HSTS, X-Frame-Options, etc.
 - CSP allows: Google Fonts, Google Apps Script (+ googleusercontent.com redirect), Cloudflare challenges, Cloudflare analytics
+
+## SEO
+- Canonical URL, meta description, robots tag in `<head>`
+- `robots.txt` and `sitemap.xml` at root
+- JSON-LD structured data (Organization + 4 Services)
+- OG + Twitter Card meta tags for social sharing
 
 ## Deployment
 - Hosted via Cloudflare Pages, auto-deploys on git push to main branch
