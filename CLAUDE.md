@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Marketing/landing site for **Anchor Point Intelligence (API)** — a data infrastructure consulting company. The entire site is a single `index.html` file with no build system, no dependencies, and no package manager.
+Marketing/landing site for **Anchor Point Intelligence (API)** — a data infrastructure consulting company. The entire site is a single `index.html` file with no build system, no dependencies, and no package manager. Apple-style design aesthetic: clean, premium, generous white space.
 
 ## Development
 
@@ -14,25 +14,27 @@ No build, lint, or test commands. To preview, open `index.html` in a browser.
 
 ## Architecture
 
-Everything lives in one self-contained `index.html` (~1518 lines):
+Everything lives in one self-contained `index.html`:
 
-- **JSON-LD** (lines 32–95): Organization + Service structured data for Google rich results.
-- **CSS** (lines 97–594): All styles in a `<style>` block. CSS custom properties in `:root` for brand palette (navy/sapphire/aegean/cerulean/sky/mist/villa/white). Responsive breakpoints at 1024px (logo name hides), 768px (nav links hide, mobile layout), and 400px (single-column steps). Includes case study card styles.
-- **HTML** (lines 596–1107): Typewriter intro overlay, four service detail pages (`svc-audit`, `svc-integration`, `svc-dashboard`, `svc-retainer`), home curtain (hero, metrics, service cards, process steps, case study section with animated SVG integration visual, CTA, footer), contact modal form, and flying anchor element.
-- **JavaScript** (lines 1109–1516): Four systems:
-  - **Typewriter intro**: Types "anchor point intelligence" (lowercase), erases to "api", morphs with gradient into logo pill position.
-  - **Curtain navigation**: `pullCurtain(id, card)` — anchor wiggles then flies down, curtain slides to reveal service page. `raiseCurtain()` — restores scroll position.
+- **JSON-LD** (lines 34–97): Organization + Service structured data for Google rich results.
+- **CSS** (lines 99–440): All styles in a `<style>` block. CSS custom properties in `:root` for monochromatic palette (black/gray-dark/gray/gray-light/gray-border/off-white/white + accent navy tones). Responsive breakpoints at 768px (nav links hide, single-column layout) and 480px (single-column process grid).
+- **HTML** (lines 442–880): Frosted glass nav bar, full-viewport hero (instant render, no animation), metrics bar, three service feature rows (Apple-style alternating layout with inline SVG illustrations), 4-step process grid, case study card with animated buoy SVG, testimonial placeholder section (TODO), CTA section, minimal footer, contact modal form.
+- **JavaScript** (lines 882+): Three systems:
+  - **Scroll reveal**: IntersectionObserver adds `.visible` class for fade-up animations on `.reveal` elements.
   - **Booking modal**: `openModal()`/`closeModal()` — two-phase booking form (contact info → availability picker) via Google Apps Script backend.
-  - **Nav scroll**: Services/Process/Case Studies links smooth-scroll to their sections.
+  - **Buoy rope tracker**: requestAnimationFrame loop drawing SVG lines from anchor hub to animated buoy positions.
 
 ## Conventions
 
-- Font: Montserrat (Google Fonts), base weight 400, also uses 100/200/300/600
+- Font: Inter (Google Fonts), weights 300/400/500/600/700
 - No external JS libraries or CSS frameworks
-- ⚓ emoji used as anchor icon throughout (replaced inline SVGs)
+- Apple-style aesthetic: white backgrounds, deep black text, single navy accent color, pill-shaped buttons (border-radius: 980px)
+- Frosted glass nav bar (backdrop-filter blur)
+- Scroll-triggered section reveals via IntersectionObserver (`.reveal` → `.visible`)
+- Services displayed as alternating feature rows (image-left/text-right, text-left/image-right) with `.feature-row.reversed`
+- ⚓ emoji used as anchor icon throughout
 - Anchor bounce animation class: `.anchor-loading`
-- Navigation between pages uses DOM show/hide with CSS transitions, not routing
-- Logo pill uses gradient text matching intro animation
+- Navigation uses anchor links with smooth scroll (html { scroll-behavior: smooth })
 
 ## Booking System (LIVE)
 - Two-phase modal: contact info + software stack → real-time availability picker
@@ -42,14 +44,20 @@ Everything lives in one self-contained `index.html` (~1518 lines):
 
 ## Case Study Section
 - Anonymized NOL dashboard project displayed as "Multi-Location Retail"
-- Animated SVG showing data flow: ACCTG/CRM/SHEETS/BANK → central ⚓ dashboard hub
+- Animated SVG showing data flow: ERP/CRM/AP-AR/PAYROLL/WMS/POS → central ⚓ dashboard hub
+- Life preserver buoy animations with rope tracking
 - Stats: 9 data sources, 6 executive views, 5 locations
 - Tags show capabilities without revealing implementation
 
+## Testimonials Section
+- TODO: Placeholder section exists with two cards
+- Replace placeholder quotes with real client testimonials when available
+- `.todo-badge` marks the section as needing real content
+
 ## Analytics
-- Cloudflare Web Analytics beacon prepared (commented out in index.html)
+- Cloudflare Web Analytics beacon prepared (currently not in HTML — re-add when ready)
 - CSP headers pre-configured for `static.cloudflareinsights.com` and `cloudflareinsights.com`
-- To activate: enable in Cloudflare dashboard, get beacon token, uncomment script tag
+- To activate: enable in Cloudflare dashboard, get beacon token, add script tag
 
 ## Security Headers
 - `_headers` file for Cloudflare Pages with CSP, HSTS, X-Frame-Options, etc.
