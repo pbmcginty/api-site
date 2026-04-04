@@ -1442,7 +1442,7 @@ document.getElementById('btn-book').addEventListener('click', async () => {
   };
 
   try {
-    const res = await fetch(APPS_SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+    const res = await fetch(APPS_SCRIPT_URL, { method:'POST', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(payload) });
     const data = await res.json();
     if (data.success) {
       document.getElementById('phase-time').classList.remove('active');
