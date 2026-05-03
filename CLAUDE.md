@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Marketing/landing site for **Anchor Point Intelligence (API)** — a data infrastructure consulting company. The entire site is a single `index.html` file with no build system, no dependencies, and no package manager. Apple-style design aesthetic: clean, premium, generous white space.
+Marketing/landing site for **Anchor Point Intelligence (API)** — a data infrastructure consulting company. The entire site is a single `index.html` file with no build system, no dependencies, and no package manager. Dark premium aesthetic with navy background, gradient text, and animated intro sequence.
 
 ## Development
 
@@ -16,10 +16,11 @@ No build, lint, or test commands. To preview, open `index.html` in a browser.
 
 Everything lives in one self-contained `index.html`:
 
-- **JSON-LD** (lines 34–97): Organization + Service structured data for Google rich results.
-- **CSS** (lines 99–440): All styles in a `<style>` block. CSS custom properties in `:root` for monochromatic palette (black/gray-dark/gray/gray-light/gray-border/off-white/white + accent navy tones). Responsive breakpoints at 768px (nav links hide, single-column layout) and 480px (single-column process grid).
-- **HTML** (lines 442–880): Frosted glass nav bar, full-viewport hero (instant render, no animation), metrics bar, three service feature rows (Apple-style alternating layout with inline SVG illustrations), 4-step process grid, case study card with animated buoy SVG, testimonial placeholder section (TODO), CTA section, minimal footer, contact modal form.
-- **JavaScript** (lines 882+): Three systems:
+- **JSON-LD** (lines 34–96): Organization + Service structured data for Google rich results.
+- **CSS** (lines 98–500): All styles in a `<style>` block. CSS custom properties in `:root` for dark nautical palette (navy/sapphire/aegean/cerulean/sky/mist/villa/white). Intro overlay, logo, dark nav, hero with ambient orbs, metrics, feature rows, process, case study, dark testimonials, CTA, dark modal. Responsive breakpoints at 1024px (logo name hides), 768px (nav links hide, single-column layout), 480px (single-column process grid).
+- **HTML** (lines 502–780): Intro overlay (typewriter), fixed logo pill, dark gradient nav, hero with grid/orbs + problem-first headline, metrics bar, three Phase 1/2/3 service feature rows with inline SVGs, 4-step process grid, case study card with animated buoy SVG, testimonial placeholder (TODO), CTA section, dark footer, two-phase contact modal.
+- **JavaScript** (lines 782+): Four systems:
+  - **Typewriter + curtain**: Types "anchor point intelligence", collapses to "api", flies to logo pill, intro slides up as curtain to reveal main content.
   - **Scroll reveal**: IntersectionObserver adds `.visible` class for fade-up animations on `.reveal` elements.
   - **Booking modal**: `openModal()`/`closeModal()` — two-phase booking form (contact info → availability picker) via Google Apps Script backend.
   - **Buoy rope tracker**: requestAnimationFrame loop drawing SVG lines from anchor hub to animated buoy positions.
@@ -28,10 +29,12 @@ Everything lives in one self-contained `index.html`:
 
 - Font: Inter (Google Fonts), weights 300/400/500/600/700
 - No external JS libraries or CSS frameworks
-- Apple-style aesthetic: white backgrounds, deep black text, single navy accent color, pill-shaped buttons (border-radius: 980px)
-- Frosted glass nav bar (backdrop-filter blur)
+- Dark premium aesthetic: navy backgrounds, gradient text (white→mist→sky), pill-shaped buttons (border-radius: 980px)
+- Typewriter intro animation → logo morph → curtain reveal on load
+- Dark gradient nav bar (transparent fade, not frosted glass)
 - Scroll-triggered section reveals via IntersectionObserver (`.reveal` → `.visible`)
 - Services displayed as alternating feature rows (image-left/text-right, text-left/image-right) with `.feature-row.reversed`
+- Hero headline: "Your data is everywhere. Your decisions shouldn't be."
 - ⚓ emoji used as anchor icon throughout
 - Anchor bounce animation class: `.anchor-loading`
 - Navigation uses anchor links with smooth scroll (html { scroll-behavior: smooth })
@@ -73,6 +76,42 @@ Everything lives in one self-contained `index.html`:
 - Hosted via Cloudflare Pages, auto-deploys on git push to main branch
 - Always git pull at start of session
 - Always git push when work is complete
+
+## Lead Gen Scraper (`lead-gen/`)
+Google Apps Script system for automated lead generation. Script ID: `1FUPTqiB-I8SM7Exi6lz3xp0SeowuBREDhYkAGXu1mpWjNlXl-J8SaYA6`
+Spreadsheet ID: `1zPJxSctTUZe6wOoTDd51B--4Viy-zNrAoW3p9KGKR9k`
+
+### Architecture
+- **Code.js** — Entry point, menu, config helpers, unsubscribe web endpoint
+- **Scraper.js** — Google Places API + ProPublica + deep website enrichment (contacts, emails, tech stack, buying signals)
+- **Email.js** — 4-step email sequence engine with open/click/reply/bounce tracking + contact promotion
+- **Reports.js** — Daily digest generator
+- **Setup.js** — Sheet initialization, email templates, trigger management, contact role backfill
+
+### Leads Sheet Columns (31 total)
+A=CompanyID, B=Company, C=ContactName, D=ContactTitle, E=Email, F=Phone, G=Website,
+H=Address, I=City, J=State, K=Industry, L=SizeEstimate, M=Revenue, N=Source,
+O=Status, P=DateFound, Q=Notes, R=Unsubscribed, S=ContactLinkedIn, T=CompanyLinkedIn,
+U=Facebook, V=Instagram, W=TechStack, X=LeadScore, Y=BuyingSignals, Z=Confidence,
+AA=DataVerification, AB=SeqStep, AC=LastEmailDate, AD=NextEmailDate, **AE=ContactRole**
+
+### Contact Role System
+Multiple contacts can exist per company (grouped by CompanyID). Only one is emailed at a time.
+- **Primary** — The best contact, actively in email sequence
+- **Queued** — Waiting in the wings, same company
+- **Promoted** — Was Queued, got bumped up after Primary fell out
+- Auto-promotion triggers: bounce, unsubscribe, sequence complete without reply
+- Scoring: personal email > generic, named contact > anonymous, title priority (Owner > CEO > Director), LinkedIn presence
+
+### Triggers (live)
+- Scraper: 4x/day (2, 8, 14, 20 AZ time), 50 searches/run
+- Reply check: 2x/day (10, 16)
+- Bounce check: 1x/day (10)
+- Digest: 1x/day (17)
+- Email batch: DISABLED (TEST_MODE = true, trigger commented out)
+
+### Budget
+$200/month Google Places free credit, $0.04/call, 5,000 calls max. Auto-throttles via `hasBudget_()`.
 
 ## Purpose
 Marketing site for Anchor Point Intelligence — the consulting business
