@@ -22,18 +22,18 @@ export async function onRequestGet(context) {
       : false;
 
     // Try to get access token
-    const token = await context.sheets.getAccessToken();
+    const token = await context.data.sheets.getAccessToken();
     results.tokenObtained = !!token;
     results.tokenPreview = token ? token.substring(0, 20) + '...' : 'FAILED';
 
     // Try to read from sheet
-    const rows = await context.sheets.getValues('Email Log!A1:B2');
+    const rows = await context.data.sheets.getValues('Email Log!A1:B2');
     results.sheetsRead = true;
     results.rowCount = rows.length;
     results.firstRow = rows[0] || 'empty';
 
     // Try to write a test value
-    await context.sheets.updateCell('Email Log!M1', 'debug-test-' + Date.now());
+    await context.data.sheets.updateCell('Email Log!M1', 'debug-test-' + Date.now());
     results.sheetsWrite = true;
 
   } catch (err) {

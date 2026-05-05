@@ -23,14 +23,14 @@ export async function onRequestGet(context) {
 
   if (tid) {
     try {
-      const rows = await context.sheets.getValues('Email Log!A:L');
+      const rows = await context.data.sheets.getValues('Email Log!A:L');
 
       for (let i = 1; i < rows.length; i++) {
         if (String(rows[i][7] || '').trim() === tid) {
           // Only record first click (column J = index 9)
           if (!rows[i][9]) {
             const rowNum = i + 1;
-            await context.sheets.updateCell(`Email Log!J${rowNum}`, new Date().toISOString());
+            await context.data.sheets.updateCell(`Email Log!J${rowNum}`, new Date().toISOString());
           }
           break;
         }

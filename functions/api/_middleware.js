@@ -8,7 +8,7 @@
 
 export async function onRequest(context) {
   context.env.SPREADSHEET_ID = context.env.SHEETS_SPREADSHEET_ID || '1zPJxSctTUZe6wOoTDd51B--4Viy-zNrAoW3p9KGKR9k';
-  context.sheets = {
+  context.data.sheets = {
     getAccessToken: () => getAccessToken(context.env),
     getValues: (range) => getValues(context.env, range),
     updateCell: (range, value) => updateCell(context.env, range, value),

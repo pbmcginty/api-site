@@ -13,11 +13,11 @@ export async function onRequestGet(context) {
 
   try {
     const env = context.env;
-    const token = await context.sheets.getAccessToken();
+    const token = await context.data.sheets.getAccessToken();
     const spreadsheetId = env.SPREADSHEET_ID;
 
     // Get all leads
-    const rows = await context.sheets.getValues('Leads!A:AE');
+    const rows = await context.data.sheets.getValues('Leads!A:AE');
 
     const updates = [];
     const affectedCompanies = new Set();
@@ -40,7 +40,7 @@ export async function onRequestGet(context) {
 
     // Batch update
     for (const u of updates) {
-      await context.sheets.updateCell(u.range, u.value);
+      await context.data.sheets.updateCell(u.range, u.value);
     }
 
     // Promote next contact at affected companies
@@ -78,11 +78,11 @@ async function promoteNextContact(context, rows, companyId) {
 
   if (bestIdx >= 0) {
     const rowNum = bestIdx + 1;
-    await context.sheets.updateCell(`Leads!AE${rowNum}`, 'Promoted');
-    await context.sheets.updateCell(`Leads!O${rowNum}`, 'New');
-    await context.sheets.updateCell(`Leads!AB${rowNum}`, ''); // Clear seq step
-    await context.sheets.updateCell(`Leads!AC${rowNum}`, ''); // Clear last email
-    await context.sheets.updateCell(`Leads!AD${rowNum}`, ''); // Clear next email
+    await context.data.sheets.updateCell(`Leads!AE${rowNum}`, 'Promoted');
+    await context.data.sheets.updateCell(`Leads!O${rowNum}`, 'New');
+    await context.data.sheets.updateCell(`Leads!AB${rowNum}`, ''); // Clear seq step
+    await context.data.sheets.updateCell(`Leads!AC${rowNum}`, ''); // Clear last email
+    await context.data.sheets.updateCell(`Leads!AD${rowNum}`, ''); // Clear next email
   }
 }
 
