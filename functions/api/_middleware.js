@@ -1,19 +1,18 @@
 /**
- * Middleware: attaches Google Sheets helper to context.
- * Env vars required (set in Cloudflare Pages settings):
- *   GOOGLE_SERVICE_ACCOUNT_EMAIL
- *   GOOGLE_PRIVATE_KEY (PEM, with \n escaped)
- *   SHEETS_SPREADSHEET_ID
+ * Middleware: attaches Google Sheets helpers to context.data.sheets
  */
 
 export async function onRequest(context) {
-  context.env.SPREADSHEET_ID = context.env.SHEETS_SPREADSHEET_ID || '1zPJxSctTUZe6wOoTDd51B--4Viy-zNrAoW3p9KGKR9k';
+  const env = context.env;
+  env.SPREADSHEET_ID = env.SHEETS_SPREADSHEET_ID || '1zPJxSctTUZe6wOoTDd51B--4Viy-zNrAoW3p9KGKR9k';
+
+  if (!context.data) context.data = {};
   context.data.sheets = {
-    getAccessToken: () => getAccessToken(context.env),
-    getValues: (range) => getValues(context.env, range),
-    updateCell: (range, value) => updateCell(context.env, range, value),
-    findRow: (sheetName, colIndex, value) => findRow(context.env, sheetName, colIndex, value),
+    getAccessToken: () => getAccessToken(env),
+    getValues: (range) => getValues(env, range),
+    updateCell: (range, value) => updateCell(env, range, value),
   };
+
   return await context.next();
 }
 
@@ -37,9 +36,8 @@ async function getAccessToken(env) {
 
   const key = await importPrivateKey(env.GOOGLE_PRIVATE_KEY);
   const signature = await crypto.subtle.sign('RSASSA-PKCS1-v1_5', key, enc.encode(signingInput));
-  const sigB64 = base64url(signature);
 
-  const jwt = `${signingInput}.${sigB64}`;
+  const jwt = `${signingInput}.${base64url(signature)}`;
 
   const resp = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
@@ -52,9 +50,8 @@ async function getAccessToken(env) {
 }
 
 async function importPrivateKey(pem) {
-  // Handle escaped newlines from env var
-  // Handle both \\n (literal backslash-n from env) and \n (real newlines)
-  const pemClean = pem.replace(/\\\\n/g, '\n').replace(/\\n/g, '\n');
+  // Cloudflare env stores \n as literal \\n text
+  const pemClean = pem.replace(/\\n/g, '\n');
   const pemBody = pemClean
     .replace('-----BEGIN PRIVATE KEY-----', '')
     .replace('-----END PRIVATE KEY-----', '')
@@ -76,7 +73,6 @@ function base64url(input) {
   if (typeof input === 'string') {
     str = btoa(input);
   } else {
-    // ArrayBuffer
     str = btoa(String.fromCharCode(...new Uint8Array(input)));
   }
   return str.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
@@ -105,14 +101,4 @@ async function updateCell(env, range, value) {
     },
     body: JSON.stringify({ values: [[value]] }),
   });
-}
-
-async function findRow(env, sheetName, colIndex, searchValue) {
-  const rows = await getValues(env, `${sheetName}!A:Z`);
-  for (let i = 1; i < rows.length; i++) {
-    if (rows[i] && String(rows[i][colIndex] || '').trim() === searchValue) {
-      return { rowIndex: i, row: rows[i] };
-    }
-  }
-  return null;
 }
