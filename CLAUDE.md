@@ -58,9 +58,11 @@ Everything lives in one self-contained `index.html`:
 - `.todo-badge` marks the section as needing real content
 
 ## Analytics
-- Cloudflare Web Analytics beacon prepared (currently not in HTML — re-add when ready)
+- Cloudflare Web Analytics active via automatic injection (EU visitors excluded). Site token: `5f6ac81dedd645e3beacd2a8241ff575`
 - CSP headers pre-configured for `static.cloudflareinsights.com` and `cloudflareinsights.com`
-- To activate: enable in Cloudflare dashboard, get beacon token, add script tag
+- Separate analytics Apps Script project in `analytics/Code.js` queries Cloudflare GraphQL API daily at 7 AM
+- Analytics data stored in Google Sheet `1oWDa6yc-ZCOxJOyRvzfXdXLHg9G4HmiW-Rai7oNC9Gw` (tabs: Daily, Top Pages, Referrers)
+- Website traffic is included in the unified daily report via cross-sheet read from the analytics sheet
 
 ## Security Headers
 - `_headers` file for Cloudflare Pages with CSP, HSTS, X-Frame-Options, etc.
@@ -84,8 +86,8 @@ Spreadsheet ID: `1zPJxSctTUZe6wOoTDd51B--4Viy-zNrAoW3p9KGKR9k`
 ### Architecture
 - **Code.js** — Entry point, menu, config helpers, unsubscribe web endpoint
 - **Scraper.js** — Google Places API + ProPublica + deep website enrichment (contacts, emails, tech stack, buying signals)
-- **Email.js** — 4-step email sequence engine with open/click/reply/bounce tracking + contact promotion
-- **Reports.js** — Daily digest generator
+- **Email.js** — 4-step email sequence engine with engagement-weighted prioritization, auto-ramping daily cap, open/click/reply/bounce tracking + contact promotion
+- **Reports.js** — Unified daily operations report (pipeline, scraping, email delivery, engagement rates by step + A/B template, lead quality, website traffic)
 - **Setup.js** — Sheet initialization, email templates, trigger management, contact role backfill
 
 ### Leads Sheet Columns (31 total)
@@ -103,12 +105,18 @@ Multiple contacts can exist per company (grouped by CompanyID). Only one is emai
 - Auto-promotion triggers: bounce, unsubscribe, sequence complete without reply
 - Scoring: personal email > generic, named contact > anonymous, title priority (Owner > CEO > Director), LinkedIn presence
 
+### Email Prioritization
+Follow-ups always send before new outreach. Within follow-ups, engaged leads (clicked > opened > none) go first. Lead score is the tiebreaker within each tier.
+
+### Cap Ramp (Config sheet)
+Daily email cap auto-increases weekly: CAP_RAMP_START (50) + CAP_RAMP_INCREMENT (25) per CAP_RAMP_INTERVAL_DAYS (7), up to CAP_RAMP_MAX (200). Freezes if bounce rate exceeds CAP_RAMP_MAX_BOUNCE_RATE (5%). MAX_EMAILS_PER_DAY acts as manual ceiling.
+
 ### Triggers (live)
 - Scraper: 4x/day (2, 8, 14, 20 AZ time), 50 searches/run
 - Reply check: 2x/day (10, 16)
 - Bounce check: 1x/day (10)
-- Digest: 1x/day (17)
-- Email batch: DISABLED (TEST_MODE = true, trigger commented out)
+- Unified daily report: 1x/day (17)
+- Email batch: LIVE (9 AM daily, TEST_MODE_ = false)
 
 ### Budget
 $200/month Google Places free credit, $0.04/call, 5,000 calls max. Auto-throttles via `hasBudget_()`.
