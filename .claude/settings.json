@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git push*)",
+      "Bash(git pull*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git checkout*)",
+      "Bash(git stash*)",
+      "Bash(git log*)",
+      "Bash(git diff*)",
+      "Bash(git status*)",
+      "Bash(clasp push*)",
+      "Bash(clasp deploy*)",
+      "Bash(clasp login*)",
+      "Bash(clasp open*)",
+      "Bash(clasp deployments*)",
+      "Bash(cd lead-gen*)",
+      "Bash(cd analytics*)",
+      "Bash(node -c*)"
+    ]
+  }
+}

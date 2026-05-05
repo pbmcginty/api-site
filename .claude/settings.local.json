@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:developers.cloudflare.com)",
+      "Bash(clasp run:*)",
+      "Bash(clasp setting:*)",
+      "Bash(clasp:*)",
+      "Bash(gcloud projects:*)",
+      "Bash(where gcloud:*)",
+      "Bash(start:*)",
+      "WebFetch(domain:script.google.com)",
+      "WebFetch(domain:script.googleusercontent.com)"
+    ]
+  }
+}
