@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="500" height="120" viewBox="0 0 500 120">
-  <rect width="500" height="120" fill="#FFFFFF"/>
+  <!-- transparent background -->
 
   <!-- Anchor -->
   <text x="50" y="72" text-anchor="middle" font-size="48">⚓</text>
